@@ -1,0 +1,13 @@
+<svg width="24px" height="24px" viewBox="0 0 24 24" id="home_screen" data-name="home screen" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Mask" width="24" height="24" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="_24x24_clip--dark" data-name="24x24/clip--dark">
+    <rect id="Mask-2" data-name="Mask" width="24" height="24" fill="none"/>
+  </g>
+  <path id="Rectangle_12" data-name="Rectangle 12" d="M14,0V10H0V0" transform="translate(5 11)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="1.5"/>
+  <path id="Rectangle_12-2" data-name="Rectangle 12" d="M0,14V0H14" transform="translate(12 4.101) rotate(45)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="1.5"/>
+  <rect id="Rectangle_13" data-name="Rectangle 13" width="4" height="6" transform="translate(10 15)" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="1.5"/>
+</svg>

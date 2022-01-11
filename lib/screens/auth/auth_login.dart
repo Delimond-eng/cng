@@ -37,8 +37,8 @@ class _AuthLoginState extends State<AuthLogin> {
                 primaryColor.withOpacity(.4),
                 primaryColor.withOpacity(.4),
                 primaryColor.withOpacity(.4),
-                Colors.white.withOpacity(.7),
-                Colors.white.withOpacity(.7),
+                primaryColor.withOpacity(.4),
+                Colors.white.withOpacity(.4),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -47,35 +47,44 @@ class _AuthLoginState extends State<AuthLogin> {
           child: SafeArea(
             child: SingleChildScrollView(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 3.50),
+                  top: MediaQuery.of(context).size.height / 3.85),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    alignment: Alignment.topCenter,
-                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    height: 100,
+                    child: Stack(
+                      overflow: Overflow.visible,
                       children: [
-                        costumAppTitle(),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            "Connectez-vous à votre compte !",
-                            style: GoogleFonts.lato(
-                              color: Colors.grey[200],
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w300,
-                              letterSpacing: 1.0,
+                        Positioned(
+                          top: -35,
+                          left: 0,
+                          child: Container(
+                            height: 200.0,
+                            width: 200.0,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                    AssetImage("assets/icons/logo_white.png"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        )
+                        ),
                       ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    child: Text(
+                      "Connectez-vous à votre compte !",
+                      style: GoogleFonts.lato(
+                        color: Colors.grey[200],
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w300,
+                        letterSpacing: 1.0,
+                      ),
                     ),
                   ),
                   Container(

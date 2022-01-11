@@ -40,16 +40,16 @@ class CategoryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.0),
             onTap: onPressed,
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(8.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (data.categorieIcon.isNotEmpty)
+                  if (data.categorieIcon.isNotEmpty) ...[
                     Container(
                       padding: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(.5),
+                        color: Colors.white.withOpacity(.9),
                         shape: BoxShape.circle,
                       ),
                       child: SvgPicture.network(
@@ -59,7 +59,7 @@ class CategoryCard extends StatelessWidget {
                         width: 30.0,
                       ),
                     )
-                  else
+                  ] else ...[
                     Container(
                       padding: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
@@ -72,7 +72,8 @@ class CategoryCard extends StatelessWidget {
                         height: 20.0,
                         width: 20.0,
                       ),
-                    ),
+                    )
+                  ],
                   const SizedBox(
                     width: 8.0,
                   ),

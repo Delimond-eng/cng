@@ -48,7 +48,7 @@ class _AuthRegisterState extends State<AuthRegister> {
           child: SafeArea(
             child: SingleChildScrollView(
               padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 8),
+                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 14),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,9 +60,28 @@ class _AuthRegisterState extends State<AuthRegister> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        costumAppTitle(),
-                        const SizedBox(
-                          height: 5.0,
+                        Container(
+                          height: 100,
+                          child: Stack(
+                            overflow: Overflow.visible,
+                            children: [
+                              Positioned(
+                                top: -40,
+                                left: -10,
+                                child: Container(
+                                  height: 200.0,
+                                  width: 200.0,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/icons/logo_white.png"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),

@@ -301,11 +301,13 @@ class _VentesViewPageState extends State<VentesViewPage> {
                     color: Colors.white.withOpacity(.5),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/icons/note-add-svgrepo-com.svg",
-                      color: Colors.yellow[800],
-                      alignment: Alignment.center,
+                  child: Container(
+                    padding: const EdgeInsets.all(2.0),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/icons/app_icon.png"),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

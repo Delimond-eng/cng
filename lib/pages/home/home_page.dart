@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               decoration: BoxDecoration(
                                 color: Colors.yellow[800].withOpacity(.7),
+                                borderRadius: BorderRadius.circular(20.0),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.withOpacity(.3),
@@ -96,8 +97,8 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        Icon(
-                                          Icons.arrow_right,
+                                        const Icon(
+                                          Icons.view_array_rounded,
                                           size: 18,
                                         ),
                                         const SizedBox(width: 5.0),
@@ -179,13 +180,15 @@ class _HomePageState extends State<HomePage> {
                               "Produits & services en vente",
                               style: GoogleFonts.lato(
                                 color: primaryColor,
-                                fontSize: 18.0,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
                             Container(
+                              width: 90.0,
                               decoration: BoxDecoration(
                                 color: Colors.yellow[800].withOpacity(.7),
+                                borderRadius: BorderRadius.circular(20.0),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.withOpacity(.3),
@@ -212,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                                               : Icons.grid_view,
                                           size: 15,
                                         ),
-                                        const SizedBox(width: 5.0),
+                                        const SizedBox(width: 10.0),
                                         Text(isGridView ? "Liste" : "Grid")
                                       ],
                                     ),
@@ -588,12 +591,38 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-              child: Row(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 15.0, vertical: 15.0),
+                child: Container(
+                  height: 50.0,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: [
+                      Positioned(
+                        top: -50,
+                        left: 0,
+                        child: Container(
+                          height: 150.0,
+                          width: 150.0,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("assets/icons/logo_white.png"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 10.0,
+                        right: 0,
+                        child: UserSession(),
+                      )
+                    ],
+                  ),
+                ) /*Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  /*Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.all(8.0),
@@ -639,11 +668,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )
                     ],
-                  ),
-                  UserSession()
+                  ),*/
+
+                  
                 ],
-              ),
-            ),
+              ),*/
+                ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               child: SearchBar(),
@@ -689,31 +719,33 @@ class _HomePageState extends State<HomePage> {
               },
             );
           } else {
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
+            return SingleChildScrollView(
               padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data.config.length,
-              itemBuilder: (context, index) {
-                return CategoryCard(
-                  data: snapshot.data.config[index],
-                  onPressed: () {
-                    if (snapshot.data.config[index].sousCategories.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.leftToRightWithFade,
-                          child: CatalogPage(
-                              subCategries:
-                                  snapshot.data.config[index].sousCategories),
-                        ),
-                      );
-                    }
-                  },
-                );
-              },
+              child: Row(
+                children: [
+                  for (int i = 0; i < snapshot.data.config.length; i++) ...[
+                    CategoryCard(
+                      data: snapshot.data.config[i],
+                      onPressed: () {
+                        if (snapshot.data.config[i].sousCategories.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.leftToRightWithFade,
+                              child: CatalogPage(
+                                  subCategries:
+                                      snapshot.data.config[i].sousCategories),
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  ]
+                ],
+              ),
             );
           }
         },

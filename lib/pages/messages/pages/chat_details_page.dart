@@ -25,11 +25,30 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageComponent(
+        gradient: LinearGradient(
+          colors: [
+            primaryColor,
+            primaryColor.withOpacity(.9),
+            primaryColor.withOpacity(.5),
+            Colors.white.withOpacity(.7),
+            Colors.white.withOpacity(.7),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
         child: Column(
           children: [
             buildHeader(),
             Expanded(
               child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30.0),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 5),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10.0,

@@ -100,12 +100,15 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                         color: Colors.white.withOpacity(.5),
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Center(
-                          child: Icon(
-                        CupertinoIcons.chat_bubble_text_fill,
-                        color: Colors.yellow[900],
-                        size: 20.0,
-                      )),
+                      child: Container(
+                        padding: const EdgeInsets.all(2.0),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/icons/app_icon.png"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 5.0),
                     Text(

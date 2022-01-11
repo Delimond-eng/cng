@@ -6,6 +6,9 @@ import 'package:get/get.dart';
 class ChatController extends GetxController {
   static ChatController instance = Get.find();
 
+  // ignore: deprecated_member_use, prefer_collection_literals
+  var messages = List<Messages>().obs;
+
   Future<List<Chats>> viewChats() async {
     var userId = storage.read("userid");
     if (userId != null) {

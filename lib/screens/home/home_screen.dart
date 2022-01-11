@@ -54,6 +54,20 @@ class _HomeScreenState extends State<HomeScreen> {
         });
         return;
       }
+
+      if (userId == null && _selectedIndex == 1) {
+        Navigator.push(
+          context,
+          PageTransition(
+            child: AuthLogin(),
+            type: PageTransitionType.leftToRightWithFade,
+          ),
+        );
+        setState(() {
+          _selectedIndex = 0;
+        });
+        return;
+      }
       pageController.jumpToPage(_selectedIndex);
     }
 

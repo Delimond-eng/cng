@@ -1,10 +1,16 @@
 import 'package:cng/components/custom_header.dart';
+import 'package:cng/components/user_session_component.dart';
+import 'package:cng/constants/global.dart';
+import 'package:cng/models/chat_model.dart';
 import 'package:cng/widgets/search_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../index.dart';
 import 'pages/chat_details_page.dart';
+import 'widgets/chat_card.dart';
+import 'widgets/chat_home_shimmer.dart';
 
 class MessagesViewPage extends StatefulWidget {
   MessagesViewPage({Key key}) : super(key: key);
@@ -43,31 +49,61 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                 buildHeader(),
                 Expanded(
                   child: Container(
-                    child: Scrollbar(
-                      radius: const Radius.circular(5.0),
-                      thickness: 4.0,
-                      child: ListView.builder(
-                        itemCount: 10,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(
-                          left: 15.0,
-                          right: 15.0,
-                          bottom: 15.0,
-                        ),
-                        itemBuilder: (context, index) {
-                          return ChatCard(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                  child: ChatDetailsPage(),
-                                  type: PageTransitionType.leftToRightWithFade,
+                    child: FutureBuilder(
+                      future: chatController.viewChats(),
+                      builder: (context, AsyncSnapshot<List<Chats>> snapshot) {
+                        if (snapshot.data != null) {
+                          if (snapshot.data.isEmpty) {
+                            return const Center(
+                              child: Text("Aucune discussion en cours !"),
+                            );
+                          } else {
+                            return Scrollbar(
+                              radius: const Radius.circular(5.0),
+                              thickness: 4.0,
+                              child: ListView.builder(
+                                itemCount: snapshot.data.length,
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(
+                                  left: 15.0,
+                                  right: 15.0,
+                                  bottom: 15.0,
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      ),
+                                itemBuilder: (context, index) {
+                                  var data = snapshot.data[index];
+                                  return ChatCard(
+                                    data: data,
+                                    onPressed: () async {
+                                      chatController.messages.clear();
+                                      chatController.messages.addAll(
+                                          snapshot.data[index].messages);
+                                      await Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          child: ChatDetailsPage(
+                                            messageSender: data.users
+                                                .firstWhere((e) =>
+                                                    e.userId !=
+                                                    storage
+                                                        .read("userid")
+                                                        .toString())
+                                                .nom,
+                                            chatId: data.chatId,
+                                          ),
+                                          type: PageTransitionType
+                                              .leftToRightWithFade,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                        } else {
+                          return const ChatListLoading();
+                        }
+                      },
                     ),
                   ),
                 )
@@ -121,144 +157,12 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                     )
                   ],
                 ),
-                Container(
-                  height: 40.0,
-                  width: 40.0,
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(.5),
-                    borderRadius: BorderRadius.circular(5.0),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 12.0,
-                        color: Colors.black.withOpacity(.2),
-                        offset: const Offset(0.0, 10.0),
-                      )
-                    ],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      CupertinoIcons.person,
-                      size: 15.0,
-                      color: Colors.grey[200],
-                    ),
-                  ),
-                )
+                UserSession()
               ],
             ),
             const SizedBox(height: 8.0),
             const SearchBar()
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ChatCard extends StatelessWidget {
-  final Function onPressed;
-  const ChatCard({
-    Key key,
-    this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 80.0,
-      margin: const EdgeInsets.only(bottom: 5),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.8),
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 12.0,
-            color: Colors.black.withOpacity(.1),
-            offset: const Offset(0.0, 10.0),
-          )
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(20.0),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20.0),
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Stack(
-                  overflow: Overflow.visible,
-                  children: [
-                    Container(
-                      height: 70.0,
-                      width: 70.0,
-                      decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(.5),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 12.0,
-                            color: Colors.black.withOpacity(.1),
-                            offset: const Offset(0.0, 10.0),
-                          )
-                        ],
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          CupertinoIcons.person,
-                          color: Colors.white,
-                          size: 18.0,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 8,
-                      right: 0,
-                      child: Container(
-                        height: 13.0,
-                        width: 13.0,
-                        decoration: BoxDecoration(
-                          color: Colors.yellow[900],
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  width: 8.0,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Gaston Delimond",
-                      style: GoogleFonts.lato(
-                        color: primaryColor,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.0,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5.0,
-                    ),
-                    Text(
-                      "Lorem ipsum dolor sit amet...",
-                      style: GoogleFonts.lato(
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
         ),
       ),
     );

@@ -1,18 +1,24 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cng/components/custom_header.dart';
 import 'package:cng/constants/global.dart';
+import 'package:cng/models/chat_model.dart';
+import 'package:cng/services/api_manager.dart';
 import 'package:cng/widgets/picked_btn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../index.dart';
 
 class ChatDetailsPage extends StatefulWidget {
-  ChatDetailsPage({Key key}) : super(key: key);
+  final String messageSender;
+  final String chatId;
+  ChatDetailsPage({Key key, this.messageSender, this.chatId}) : super(key: key);
 
   @override
   _ChatDetailsPageState createState() => _ChatDetailsPageState();
@@ -21,10 +27,52 @@ class ChatDetailsPage extends StatefulWidget {
 class _ChatDetailsPageState extends State<ChatDetailsPage> {
   final DateTime now = DateTime.now();
 
+  StreamSubscription _streamSubscription;
+  final ScrollController _controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+    initData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
+  }
+
+  initData() {
+    try {
+      _streamSubscription = streamChat.listen((result) {
+        for (int i = 0; i < result.chats.length; i++) {
+          if (result.chats[i].chatId == widget.chatId) {
+            chatController.messages.value = result.chats[i].messages;
+            scrollToDown();
+          }
+        }
+      });
+    } catch (err) {
+      print("error from stream message listener $err");
+    }
+  }
+
+  void scrollToDown() {
+    /*_controller.animateTo(
+      _controller.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.fastOutSlowIn,
+    );*/
+    _controller.jumpTo(_controller.position.maxScrollExtent);
+  }
+
+  Stream<ChatModel> get streamChat async* {
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      var data = await ApiManager.viewChats();
+      yield data;
+    }
   }
 
   @override
@@ -57,36 +105,50 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: SingleChildScrollView(
+                  controller: _controller,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10.0,
                     vertical: 10.0,
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      BubbleNormal(
-                        text:
-                            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto quam natus provident!',
-                        isSender: false,
-                        color: primaryColor,
-                        tail: true,
-                        textStyle: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      BubbleNormal(
-                        text:
-                            'Lorem ipsum dolor sit amet consectetur adipisicing elit!',
-                        isSender: true,
-                        color: const Color(0xFFE8E8EE),
-                        tail: true,
-                        sent: true,
-                        textStyle: GoogleFonts.lato(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      DateChip(
+                  child: Obx(() {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (int i = 0;
+                            i < chatController.messages.length;
+                            i++) ...[
+                          if (chatController.messages[i].media == null) ...[
+                            BubbleSpecialOne(
+                              text: chatController.messages[i].message,
+                              isSender: chatController.messages[i].userId ==
+                                      storage.read("userid").toString()
+                                  ? false
+                                  : true,
+                              color: chatController.messages[i].userId ==
+                                      storage.read("userid").toString()
+                                  ? primaryColor
+                                  : const Color(0xFFE8E8EE),
+                              tail: true,
+                              textStyle: GoogleFonts.lato(
+                                color: chatController.messages[i].userId ==
+                                        storage.read("userid").toString()
+                                    ? Colors.white
+                                    : Colors.black87,
+                                fontSize: 16.0,
+                              ),
+                              delivered: true,
+                            ),
+                          ] else ...[
+                            ImageBubble(
+                              isSender: chatController.messages[i].userId ==
+                                      storage.read("userid").toString()
+                                  ? true
+                                  : false,
+                            ),
+                          ]
+                        ],
+
+                        /*DateChip(
                         date: DateTime(now.year, now.month, now.day - 2),
                       ),
                       BubbleNormal(
@@ -140,10 +202,10 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                           color: Colors.white,
                         ),
                       ),
-                      BubbleSpecialOne(
+                      const BubbleSpecialOne(
                         text: 'bubble special one without tail',
                         tail: false,
-                        color: const Color(0xFFE8E8EE),
+                        color: Color(0xFFE8E8EE),
                         sent: true,
                       ),
                       BubbleSpecialTwo(
@@ -157,10 +219,10 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                       DateChip(
                         date: now,
                       ),
-                      BubbleSpecialTwo(
+                      const BubbleSpecialTwo(
                         text: 'bubble special tow with tail',
                         isSender: true,
-                        color: const Color(0xFFE8E8EE),
+                        color: Color(0xFFE8E8EE),
                         sent: true,
                       ),
                       BubbleSpecialTwo(
@@ -172,14 +234,18 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                           color: Colors.white,
                         ),
                       ),
-                      BubbleSpecialTwo(
+                      const BubbleSpecialTwo(
                         text: 'bubble special tow without tail',
                         tail: false,
-                        color: const Color(0xFFE8E8EE),
+                        color: Color(0xFFE8E8EE),
                         delivered: true,
                       ),
-                    ],
-                  ),
+                      ImageBubble(
+                        isSender: true,
+                      ),*/
+                      ],
+                    );
+                  }),
                 ),
               ),
             ),
@@ -370,7 +436,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                 ),
                 const SizedBox(width: 10.0),
                 Text(
-                  "Gaston delimond",
+                  widget.messageSender,
                   style: GoogleFonts.lato(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -413,6 +479,50 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ImageBubble extends StatelessWidget {
+  final bool isSender;
+  final String image;
+  final Function onPressed;
+  const ImageBubble({
+    Key key,
+    this.isSender = false,
+    this.image,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: isSender ? Alignment.centerLeft : Alignment.centerRight,
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 10.0,
+          vertical: 5.0,
+        ),
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: isSender
+                  ? primaryColor.withOpacity(.15)
+                  : Colors.black.withOpacity(.1),
+              blurRadius: 12.0,
+              offset: const Offset(0, 3),
+            )
+          ],
+          image: const DecorationImage(
+            image: AssetImage("assets/shapes/placeholder.png"),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        height: 120,
+        width: 200.0,
       ),
     );
   }

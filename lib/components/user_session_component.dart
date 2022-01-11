@@ -14,10 +14,16 @@ class UserSession extends StatelessWidget {
   Widget build(BuildContext context) {
     return (usersession != null)
         ? PopupMenuButton(
-            color: primaryColor.withOpacity(.9),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-            elevation: 0,
+            color: const Color(0xff000033),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20.0),
+                bottomRight: Radius.circular(20.0),
+                topRight: Radius.zero,
+                topLeft: Radius.circular(20.0),
+              ),
+            ),
+            elevation: 10,
             child: Container(
               height: 40.0,
               width: 40.0,

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:cng/widgets/picked_btn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -360,33 +361,85 @@ class _AddVentePageState extends State<AddVentePage>
         BtnDark(
           onPressed: () {
             showModalBottomSheet(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
                 ),
-                elevation: 2,
-                barrierColor: Colors.black26,
-                backgroundColor: Colors.white,
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    height: 100.0,
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PickerBtn(
-                          icon: CupertinoIcons.camera_on_rectangle,
-                          label: "Capture",
-                          onPressed: () async {
-                            var pickedFile =
-                                await takePhoto(src: ImageSource.camera);
-                            if (pickedFile != null) {
-                              if (produitId.isEmpty) {
-                                XDialog.showConfirmation(
+              ),
+              elevation: 2,
+              barrierColor: Colors.black26,
+              backgroundColor: Colors.white,
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  height: 100.0,
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PickerBtn(
+                        icon: CupertinoIcons.camera_on_rectangle,
+                        label: "Capture",
+                        onPressed: () async {
+                          var pickedFile =
+                              await takePhoto(src: ImageSource.camera);
+                          if (pickedFile != null) {
+                            if (produitId.isEmpty) {
+                              XDialog.showConfirmation(
+                                content:
+                                    "Vous devez enregistrer votre produit avant l'insértion des images !",
+                                title: "Aucun produit trouvé",
+                                icon: Icons.info,
+                                context: context,
+                                onCancel: () {
+                                  Get.back();
+                                  controller.index = 0;
+                                },
+                              );
+                              return;
+                            }
+                            var imageBytes =
+                                File(pickedFile.path).readAsBytesSync();
+                            var strImage = base64Encode(imageBytes);
+                            Xloading.showLoading(context);
+
+                            await managerController.addNewProduct(
+                              key: "image",
+                              data: <String, dynamic>{
+                                "user_id": userId,
+                                "produit_id": produitId,
+                                "media": strImage
+                              },
+                            ).then((result) async {
+                              Xloading.dismiss();
+                              print(result);
+
+                              var status = result["reponse"]["status"];
+
+                              if (status == "success") {
+                                await XDialog.showSuccessAnimation(context);
+                                setState(() {
+                                  images.add(strImage);
+                                });
+                              }
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        width: 40.0,
+                      ),
+                      PickerBtn(
+                        icon: CupertinoIcons.photo,
+                        label: "Gallerie",
+                        onPressed: () async {
+                          var pickedFile =
+                              await takePhoto(src: ImageSource.gallery);
+                          if (pickedFile != null) {
+                            if (produitId.isEmpty) {
+                              XDialog.showConfirmation(
                                   content:
                                       "Vous devez enregistrer votre produit avant l'insértion des images !",
                                   title: "Aucun produit trouvé",
@@ -395,94 +448,43 @@ class _AddVentePageState extends State<AddVentePage>
                                   onCancel: () {
                                     Get.back();
                                     controller.index = 0;
-                                  },
-                                );
-                                return;
-                              }
-                              var imageBytes =
-                                  File(pickedFile.path).readAsBytesSync();
-                              var strImage = base64Encode(imageBytes);
-                              Xloading.showLoading(context);
-
-                              await managerController.addNewProduct(
-                                key: "image",
-                                data: <String, dynamic>{
-                                  "user_id": userId,
-                                  "produit_id": produitId,
-                                  "media": strImage
-                                },
-                              ).then((result) async {
-                                Xloading.dismiss();
-                                print(result);
-
-                                var status = result["reponse"]["status"];
-
-                                if (status == "success") {
-                                  await XDialog.showSuccessAnimation(context);
-                                  setState(() {
-                                    images.add(strImage);
                                   });
-                                }
-                              });
+                              return;
                             }
-                          },
-                        ),
-                        const SizedBox(
-                          width: 40.0,
-                        ),
-                        PickerBtn(
-                          icon: CupertinoIcons.photo,
-                          label: "Gallerie",
-                          onPressed: () async {
-                            var pickedFile =
-                                await takePhoto(src: ImageSource.gallery);
-                            if (pickedFile != null) {
-                              if (produitId.isEmpty) {
-                                XDialog.showConfirmation(
-                                    content:
-                                        "Vous devez enregistrer votre produit avant l'insértion des images !",
-                                    title: "Aucun produit trouvé",
-                                    icon: Icons.info,
-                                    context: context,
-                                    onCancel: () {
-                                      Get.back();
-                                      controller.index = 0;
-                                    });
-                                return;
+                            var imageBytes =
+                                File(pickedFile.path).readAsBytesSync();
+                            var strImage = base64Encode(imageBytes);
+                            Xloading.showLoading(context);
+
+                            await managerController.addNewProduct(
+                              key: "image",
+                              data: <String, dynamic>{
+                                "user_id": userId,
+                                "produit_id": produitId,
+                                "media": strImage
+                              },
+                            ).then((result) async {
+                              Xloading.dismiss();
+                              print(result);
+
+                              var status = result["reponse"]["status"];
+
+                              if (status == "success") {
+                                await XDialog.showSuccessAnimation(context);
+
+                                setState(() {
+                                  images.add(strImage);
+                                });
                               }
-                              var imageBytes =
-                                  File(pickedFile.path).readAsBytesSync();
-                              var strImage = base64Encode(imageBytes);
-                              Xloading.showLoading(context);
-
-                              await managerController.addNewProduct(
-                                key: "image",
-                                data: <String, dynamic>{
-                                  "user_id": userId,
-                                  "produit_id": produitId,
-                                  "media": strImage
-                                },
-                              ).then((result) async {
-                                Xloading.dismiss();
-                                print(result);
-
-                                var status = result["reponse"]["status"];
-
-                                if (status == "success") {
-                                  await XDialog.showSuccessAnimation(context);
-
-                                  setState(() {
-                                    images.add(strImage);
-                                  });
-                                }
-                              });
-                            }
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                });
+                            });
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                );
+              },
+            );
           },
         ),
         const SizedBox(
@@ -1098,106 +1100,6 @@ class DetailField extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class PickerBtn extends StatelessWidget {
-  final Function onPressed;
-  final String label;
-  final IconData icon;
-  const PickerBtn({
-    this.onPressed,
-    this.label,
-    this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.yellow[800],
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(.1),
-                  blurRadius: 12.0,
-                  offset: const Offset(0, 12.0),
-                )
-              ],
-            ),
-            height: 50.0,
-            width: 50.0,
-            child: Center(
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: 18.0,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 5.0,
-          ),
-          Text(label)
-        ],
-      ),
-    );
-  }
-}
-
-class BtnDark extends StatelessWidget {
-  const BtnDark({this.onPressed});
-
-  final Function onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60.0,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.circular(5.0),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 12.0,
-            color: Colors.black.withOpacity(.2),
-            offset: const Offset(0, 10.0),
-          )
-        ],
-      ),
-      child: Material(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(5.0),
-          onTap: onPressed,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(CupertinoIcons.add, color: Colors.white, size: 15.0),
-              const SizedBox(
-                width: 8.0,
-              ),
-              Text(
-                "AJOUTER IMAGES",
-                style: GoogleFonts.lato(
-                  color: Colors.white,
-                  letterSpacing: 1.5,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

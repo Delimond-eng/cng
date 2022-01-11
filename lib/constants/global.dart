@@ -24,7 +24,6 @@ Future<PickedFile> takePhoto({ImageSource src}) async {
     source: src,
     maxHeight: 400,
     maxWidth: 400,
-    imageQuality: 70,
   );
 
   if (pickedFile != null) {

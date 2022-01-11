@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'controllers/chat_controller.dart';
 import 'controllers/manager_controller.dart';
 import 'controllers/users_controller.dart';
 import 'index.dart';
@@ -19,6 +20,7 @@ void main() async {
   await GetStorage.init();
   Get.put(UsersController());
   Get.put(ManagerController());
+  Get.put(ChatController());
   runApp(const MyApp());
 }
 

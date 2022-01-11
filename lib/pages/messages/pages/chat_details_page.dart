@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cng/components/custom_header.dart';
+import 'package:cng/constants/global.dart';
+import 'package:cng/widgets/picked_btn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../index.dart';
 
@@ -41,6 +47,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
             buildHeader(),
             Expanded(
               child: Container(
+                margin: const EdgeInsets.only(top: 10.0),
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -202,7 +209,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.only(top: 10, bottom: 10),
-                          hintText: "Ecrire votre message...",
+                          hintText: "Ecrire un message...",
                           hintStyle: GoogleFonts.lato(
                             color: Colors.black54,
                             fontSize: 14.0,
@@ -215,24 +222,86 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                               size: 20.0,
                             ),
                           ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              CupertinoIcons.camera_on_rectangle_fill,
-                              color: Colors.grey,
-                              size: 18.0,
-                            ),
-                            onPressed: () {
-                              print("clicked !");
-                            },
-                          ),
                           border: InputBorder.none,
                           counterText: '',
+                          suffixIcon: CustomGradientIconBtn(
+                            onPressed: () async {
+                              showModalBottomSheet(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0),
+                                  ),
+                                ),
+                                elevation: 2,
+                                barrierColor: Colors.black26,
+                                backgroundColor: Colors.white,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    height: 100.0,
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        PickerBtn(
+                                          icon: CupertinoIcons
+                                              .camera_on_rectangle,
+                                          label: "Capture",
+                                          onPressed: () async {
+                                            var pickedFile = await takePhoto(
+                                                src: ImageSource.camera);
+                                            if (pickedFile != null) {
+                                              var imageBytes =
+                                                  File(pickedFile.path)
+                                                      .readAsBytesSync();
+                                              var strImage =
+                                                  base64Encode(imageBytes);
+                                            }
+                                          },
+                                        ),
+                                        const SizedBox(
+                                          width: 40.0,
+                                        ),
+                                        PickerBtn(
+                                          icon: CupertinoIcons.photo,
+                                          label: "Gallerie",
+                                          onPressed: () async {
+                                            var pickedFile = await takePhoto(
+                                                src: ImageSource.gallery);
+                                            if (pickedFile != null) {
+                                              var imageBytes =
+                                                  File(pickedFile.path)
+                                                      .readAsBytesSync();
+                                              var strImage =
+                                                  base64Encode(imageBytes);
+                                            }
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            icon: CupertinoIcons.photo_camera_solid,
+                            iconColor: Colors.black87,
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.yellow[500],
+                                accentColor,
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(.7),
                         borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: primaryColor, width: 1.0),
+                        border: Border.all(color: accentColor, width: 1.0),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(.3),
@@ -246,28 +315,17 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                   const SizedBox(
                     width: 5.0,
                   ),
-                  Container(
-                    height: 50.0,
-                    width: 50.0,
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(30.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 12.0,
-                          color: Colors.black.withOpacity(.1),
-                          offset: const Offset(0.0, 10.0),
-                        )
+                  CustomGradientIconBtn(
+                    onPressed: () {},
+                    icon: Icons.send_rounded,
+                    iconColor: Colors.white,
+                    gradient: LinearGradient(
+                      colors: [
+                        primaryColor,
+                        secondaryColor,
                       ],
                     ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.send_rounded,
-                        color: Colors.white,
-                        size: 20.0,
-                      ),
-                    ),
-                  )
+                  ),
                 ],
               ),
             )
@@ -299,7 +357,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                     height: 40.0,
                     width: 40.0,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(.8),
+                      color: Colors.white.withOpacity(.5),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                     child: Center(
@@ -314,7 +372,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                 Text(
                   "Gaston delimond",
                   style: GoogleFonts.lato(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.w700,
                     fontSize: 18.0,
                   ),
@@ -323,24 +381,92 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
             ),
             Container(
               height: 40.0,
-              width: 40.0,
-              padding: const EdgeInsets.all(8.0),
+              width: 100.0,
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(.5),
+                color: Colors.yellow[700],
                 borderRadius: BorderRadius.circular(5.0),
                 boxShadow: [
                   BoxShadow(
-                      blurRadius: 12.0,
-                      color: Colors.black.withOpacity(.2),
-                      offset: const Offset(0.0, 10.0))
+                    color: Colors.black.withOpacity(.2),
+                    blurRadius: 5,
+                    offset: const Offset(0, 10),
+                  )
                 ],
               ),
-              child: Center(
-                child: Icon(CupertinoIcons.person,
-                    size: 15.0, color: Colors.grey[200]),
+              child: Material(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(5.0),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(5.0),
+                  onTap: () {},
+                  child: Center(
+                    child: Text(
+                      "Voir produit",
+                      style: GoogleFonts.lato(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            )
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomGradientIconBtn extends StatelessWidget {
+  final Function onPressed;
+  final Gradient gradient;
+  final IconData icon;
+  final Color iconColor;
+  const CustomGradientIconBtn({
+    Key key,
+    this.onPressed,
+    this.gradient,
+    this.icon,
+    this.iconColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50.0,
+      width: 50.0,
+      decoration: BoxDecoration(
+        gradient: gradient,
+        /*LinearGradient(
+          colors: [
+            Colors.yellow[500],
+            accentColor,
+          ],
+        ),*/
+        borderRadius: BorderRadius.circular(30.0),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 12.0,
+            color: Colors.black.withOpacity(.1),
+            offset: const Offset(0.0, 10.0),
+          )
+        ],
+      ),
+      child: Material(
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30.0),
+          onTap: onPressed,
+          child: Center(
+            child: Icon(
+              //CupertinoIcons.photo_camera_solid,
+              icon,
+              color: iconColor,
+              size: 20.0,
+            ),
+          ),
         ),
       ),
     );

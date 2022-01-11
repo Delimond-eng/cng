@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cng/constants/global.dart';
 import 'package:cng/models/chat.dart';
+import 'package:cng/models/chat_model.dart';
 import 'package:cng/models/menu_config_model.dart';
 import 'package:cng/models/products_model.dart';
 import 'package:cng/models/user_product_model.dart';
@@ -126,6 +127,33 @@ class ApiManager {
       }
     } catch (err) {
       print("error from chating $err");
+    }
+  }
+
+  static Future<ChatModel> viewChats() async {
+    var userId = storage.read("userid");
+    var response;
+
+    try {
+      response = await ApiService.request(
+        body: <String, dynamic>{
+          "user_id": userId,
+        },
+        url: "/users/chats",
+        method: "post",
+      );
+    } catch (err) {
+      print("error from view chats $err");
+    }
+
+    if (response != null) {
+      var json = jsonDecode(response);
+      if (json["error"] != null) {
+        return null;
+      }
+      return ChatModel.fromJson(json);
+    } else {
+      return null;
     }
   }
 }

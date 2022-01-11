@@ -33,8 +33,8 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   @override
   void initState() {
     super.initState();
-
     initData();
+    scrollToDown();
   }
 
   @override
@@ -49,7 +49,6 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
         for (int i = 0; i < result.chats.length; i++) {
           if (result.chats[i].chatId == widget.chatId) {
             chatController.messages.value = result.chats[i].messages;
-            scrollToDown();
           }
         }
       });

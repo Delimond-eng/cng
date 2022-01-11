@@ -2,6 +2,7 @@ import 'package:cng/components/custom_header.dart';
 import 'package:cng/components/user_session_component.dart';
 import 'package:cng/constants/global.dart';
 import 'package:cng/models/chat_model.dart';
+import 'package:cng/services/api_manager.dart';
 import 'package:cng/widgets/search_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:page_transition/page_transition.dart';
@@ -20,6 +21,14 @@ class MessagesViewPage extends StatefulWidget {
 }
 
 class _MessagesViewPageState extends State<MessagesViewPage> {
+  Stream<List<Chats>> get streamMessages async* {
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      var data = await chatController.viewChats();
+      yield data;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,59 +58,64 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                 buildHeader(),
                 Expanded(
                   child: Container(
-                    child: FutureBuilder(
-                      future: chatController.viewChats(),
+                    child: StreamBuilder(
+                      stream: streamMessages,
                       builder: (context, AsyncSnapshot<List<Chats>> snapshot) {
-                        if (snapshot.data != null) {
-                          if (snapshot.data.isEmpty) {
-                            return const Center(
-                              child: Text("Aucune discussion en cours !"),
-                            );
-                          } else {
-                            return Scrollbar(
-                              radius: const Radius.circular(5.0),
-                              thickness: 4.0,
-                              child: ListView.builder(
-                                itemCount: snapshot.data.length,
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.only(
-                                  left: 15.0,
-                                  right: 15.0,
-                                  bottom: 15.0,
-                                ),
-                                itemBuilder: (context, index) {
-                                  var data = snapshot.data[index];
-                                  return ChatCard(
-                                    data: data,
-                                    onPressed: () async {
-                                      chatController.messages.clear();
-                                      chatController.messages.addAll(
-                                          snapshot.data[index].messages);
-                                      await Navigator.push(
-                                        context,
-                                        PageTransition(
-                                          child: ChatDetailsPage(
-                                            messageSender: data.users
-                                                .firstWhere((e) =>
-                                                    e.userId !=
-                                                    storage
-                                                        .read("userid")
-                                                        .toString())
-                                                .nom,
-                                            chatId: data.chatId,
-                                          ),
-                                          type: PageTransitionType
-                                              .leftToRightWithFade,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                        } else {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const ChatListLoading();
+                        } else {
+                          if (snapshot.hasData) {
+                            if (snapshot.data.isEmpty) {
+                              return const Center(
+                                child: Text("Aucune discussion en cours !"),
+                              );
+                            } else {
+                              return Scrollbar(
+                                radius: const Radius.circular(5.0),
+                                thickness: 4.0,
+                                child: ListView.builder(
+                                  itemCount: snapshot.data.length,
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.only(
+                                    left: 15.0,
+                                    right: 15.0,
+                                    bottom: 15.0,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    var data = snapshot.data[index];
+                                    return ChatCard(
+                                      data: data,
+                                      onPressed: () async {
+                                        chatController.messages.clear();
+                                        chatController.messages.addAll(
+                                            snapshot.data[index].messages);
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            child: ChatDetailsPage(
+                                              messageSender: data.users
+                                                  .firstWhere((e) =>
+                                                      e.userId !=
+                                                      storage
+                                                          .read("userid")
+                                                          .toString())
+                                                  .nom,
+                                              chatId: data.chatId,
+                                            ),
+                                            type: PageTransitionType
+                                                .leftToRightWithFade,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          } else {
+                            return const Text("Aucune discussion en cours !");
+                          }
                         }
                       },
                     ),

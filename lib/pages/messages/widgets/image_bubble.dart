@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cng/constants/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +10,7 @@ class ImageBubble extends StatelessWidget {
   final bool delivered;
   final bool seen;
   final String image;
+  final String time;
   final Function onPressed;
   const ImageBubble({
     Key key,
@@ -17,6 +20,7 @@ class ImageBubble extends StatelessWidget {
     this.sent = false,
     this.delivered = false,
     this.seen = false,
+    this.time,
   }) : super(key: key);
 
   @override
@@ -66,10 +70,15 @@ class ImageBubble extends StatelessWidget {
               width: 250.0,
               height: 155,
               decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage("assets/shapes/placeholder.png"),
-                  fit: BoxFit.cover,
-                ),
+                image: image != null && image.length < 200
+                    ? const DecorationImage(
+                        image: AssetImage("assets/shapes/placeholder.png"),
+                        fit: BoxFit.cover,
+                      )
+                    : DecorationImage(
+                        image: MemoryImage(base64Decode(image)),
+                        fit: BoxFit.cover,
+                      ),
                 borderRadius: BorderRadius.circular(15.0),
               ),
             ),
@@ -79,7 +88,7 @@ class ImageBubble extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "12:30",
+                    time,
                     style: GoogleFonts.lato(
                       color: Colors.grey[500],
                       fontSize: 10.0,

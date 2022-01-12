@@ -149,7 +149,13 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                               ),
                             ] else ...[
                               ImageBubble(
-                                seen: true,
+                                time: chatController
+                                    .messages[i].dateEnregistrement
+                                    .trim()
+                                    .split("|")[0]
+                                    .toString(),
+                                image: chatController.messages[i].media,
+                                sent: true,
                                 isSender: chatController.messages[i].userId ==
                                         storage.read("userid").toString()
                                     ? true
@@ -264,6 +270,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                                                       .readAsBytesSync();
                                               var strImage =
                                                   base64Encode(imageBytes);
+                                              print(strImage);
                                               await sendMedia(
                                                   context, strImage);
                                             }
@@ -406,7 +413,6 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
   }
 
   Future<void> sendMessage(context) async {
-    FocusScope.of(context).requestFocus(inputNode);
     if (textMessage.text.isEmpty) {
       Get.snackbar(
         "Avertissement",
@@ -426,19 +432,22 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
       userId: storage.read("userid"),
     );
     await ApiManager.chatService(chat: message).then((res) {
+      FocusScope.of(context).requestFocus(inputNode);
+      setState(() {
+        textMessage.text = "";
+      });
       print(res);
     });
   }
 
   Future<void> sendMedia(context, String media) async {
-    FocusScope.of(context).requestFocus(inputNode);
-
     Chat message = Chat(
       chatId: widget.chatId,
       media: media,
       userId: storage.read("userid"),
     );
     await ApiManager.chatService(chat: message).then((res) {
+      Get.back();
       print(res);
     });
   }

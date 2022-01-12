@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cng/constants/style.dart';
+import 'package:cng/pages/messages/widgets/custom_cache_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -58,6 +59,7 @@ class ImageBubble extends StatelessWidget {
           horizontal: 10.0,
           vertical: 5.0,
         ),
+        padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
           color: isSender ? primaryColor : const Color(0xFFE8E8EE),
           borderRadius: BorderRadius.circular(15.0),
@@ -76,7 +78,8 @@ class ImageBubble extends StatelessWidget {
                         fit: BoxFit.cover,
                       )
                     : DecorationImage(
-                        image: MemoryImage(base64Decode(image)),
+                        image: CacheImageProvider(
+                            img: base64Decode(image), tag: time),
                         fit: BoxFit.cover,
                       ),
                 borderRadius: BorderRadius.circular(15.0),

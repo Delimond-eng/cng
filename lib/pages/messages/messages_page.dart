@@ -21,6 +21,7 @@ class MessagesViewPage extends StatefulWidget {
 }
 
 class _MessagesViewPageState extends State<MessagesViewPage> {
+  
   Stream<List<Chats>> get streamMessages async* {
     while (true) {
       await Future.delayed(const Duration(milliseconds: 500));

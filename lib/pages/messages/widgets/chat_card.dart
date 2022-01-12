@@ -58,11 +58,19 @@ class ChatCard extends StatelessWidget {
                           )
                         ],
                       ),
-                      child: const Center(
-                        child: Icon(
-                          CupertinoIcons.person,
-                          color: Colors.white,
-                          size: 18.0,
+                      child: Center(
+                        child: Text(
+                          data.users
+                              .firstWhere((e) =>
+                                  e.userId != storage.read("userid").toString())
+                              .nom
+                              .substring(0, 1)
+                              .toUpperCase(),
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 20.0,
+                          ),
                         ),
                       ),
                     ),
@@ -111,42 +119,26 @@ class ChatCard extends StatelessWidget {
                         ),
                       )
                     ] else ...[
-                      Container(
-                        height: 25.0,
-                        width: 100,
-                        padding: const EdgeInsets.all(4.0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(2.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(.3),
-                              blurRadius: 8.0,
-                              offset: const Offset(0, 3),
-                            )
-                          ],
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              CupertinoIcons.photo_fill,
-                              size: 10.0,
-                              color: darkBlueColor,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            CupertinoIcons.photo_fill,
+                            size: 17.0,
+                            color: accentColor,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "Photo",
+                            style: GoogleFonts.lato(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black87,
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "image...",
-                              style: GoogleFonts.lato(
-                                fontSize: 12.0,
-                                color: Colors.yellow[800],
-                              ),
-                            )
-                          ],
-                        ),
+                          )
+                        ],
                       ),
                     ],
                   ],

@@ -33,8 +33,9 @@ class _AuthLoginState extends State<AuthLogin> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                primaryColor.withOpacity(.8),
-                primaryColor.withOpacity(.4),
+                darkBlueColor,
+                darkBlueColor,
+                primaryColor,
                 primaryColor.withOpacity(.4),
                 primaryColor.withOpacity(.4),
                 primaryColor.withOpacity(.4),

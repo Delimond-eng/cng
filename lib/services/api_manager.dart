@@ -103,28 +103,15 @@ class ApiManager {
     }
   }
 
-  static Future chatService({String type, Chat chat}) async {
+  static Future chatService({Chat chat}) async {
     var userId = storage.read("userid");
     var response;
     try {
-      switch (type) {
-        case "send":
-          response = await ApiService.request(
-            body: chat.toMap(),
-            url: "/users/chats/send",
-            method: "post",
-          );
-          break;
-        case "view":
-          response = await ApiService.request(
-            body: <String, dynamic>{
-              "user_id": userId,
-            },
-            url: "/users/chats",
-            method: "post",
-          );
-          break;
-      }
+      response = await ApiService.request(
+        body: chat.toMap(),
+        url: "/users/chats/send",
+        method: "post",
+      );
     } catch (err) {
       print("error from chating $err");
     }

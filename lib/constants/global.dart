@@ -39,6 +39,24 @@ String dateFromString(DateTime date) {
   return formatted;
 }
 
+String chatDateParse(String strdate) {
+  final DateFormat _formatter = (strdate.contains("-"))
+      ? DateFormat('dd-MM-yyyy')
+      : DateFormat('dd/MM/yyyy');
+
+  DateTime date = _formatter.parse(strdate);
+
+  final now = DateTime.now();
+  if (_formatter.format(now) == _formatter.format(date)) {
+    return 'Aujourd\'hui';
+  } else if (_formatter.format(DateTime(now.year, now.month, now.day - 1)) ==
+      _formatter.format(date)) {
+    return 'Hier';
+  } else {
+    return DateFormat.yMMMd("fr_FR").format(date);
+  }
+}
+
 DateTime strTodate(String date) {
   final DateFormat formatter = (date.contains("-"))
       ? DateFormat('dd-MM-yyyy')

@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cng/components/custom_header.dart';
 import 'package:cng/constants/global.dart';
+import 'package:cng/models/chat.dart';
 import 'package:cng/models/chat_model.dart';
+import 'package:cng/pages/messages/widgets/custom_chat_bubble.dart';
+import 'package:cng/pages/messages/widgets/image_bubble.dart';
 import 'package:cng/services/api_manager.dart';
 import 'package:cng/widgets/picked_btn.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,12 +31,14 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
 
   StreamSubscription _streamSubscription;
   final ScrollController _controller = ScrollController();
+  final TextEditingController textMessage = TextEditingController();
+  FocusNode inputNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     initData();
-    scrollToDown();
+    //scrollToDown();
   }
 
   @override
@@ -43,27 +47,19 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
     _streamSubscription.cancel();
   }
 
-  initData() {
+  initData() async {
     try {
       _streamSubscription = streamChat.listen((result) {
         for (int i = 0; i < result.chats.length; i++) {
           if (result.chats[i].chatId == widget.chatId) {
             chatController.messages.value = result.chats[i].messages;
+            //_controller.jumpTo(_controller.position.maxScrollExtent);
           }
         }
       });
     } catch (err) {
       print("error from stream message listener $err");
     }
-  }
-
-  void scrollToDown() {
-    /*_controller.animateTo(
-      _controller.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.fastOutSlowIn,
-    );*/
-    _controller.jumpTo(_controller.position.maxScrollExtent);
   }
 
   Stream<ChatModel> get streamChat async* {
@@ -102,149 +98,69 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                     top: Radius.circular(30.0),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: SingleChildScrollView(
-                  controller: _controller,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 10.0,
-                  ),
-                  child: Obx(() {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (int i = 0;
-                            i < chatController.messages.length;
-                            i++) ...[
-                          if (chatController.messages[i].media == null) ...[
-                            BubbleSpecialOne(
-                              text: chatController.messages[i].message,
-                              isSender: chatController.messages[i].userId ==
-                                      storage.read("userid").toString()
-                                  ? false
-                                  : true,
-                              color: chatController.messages[i].userId ==
-                                      storage.read("userid").toString()
-                                  ? primaryColor
-                                  : const Color(0xFFE8E8EE),
-                              tail: true,
-                              textStyle: GoogleFonts.lato(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                child: Scrollbar(
+                  radius: const Radius.circular(10.0),
+                  interactive: true,
+                  thickness: 5,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10.0,
+                    ),
+                    child: Obx(() {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          for (int i = 0;
+                              i < chatController.messages.length;
+                              i++) ...[
+                            /*CustomDateChip(
+                              date: chatController
+                                  .messages[i].dateEnregistrement
+                                  .trim()
+                                  .split("|")[1]
+                                  .trim(),
+                            ),*/
+                            if (chatController.messages[i].media == null) ...[
+                              CustomChatBubble(
+                                time: chatController
+                                    .messages[i].dateEnregistrement
+                                    .trim()
+                                    .split("|")[0]
+                                    .toString(),
+                                text: chatController.messages[i].message,
+                                isSender: chatController.messages[i].userId ==
+                                        storage.read("userid").toString()
+                                    ? false
+                                    : true,
                                 color: chatController.messages[i].userId ==
                                         storage.read("userid").toString()
-                                    ? Colors.white
-                                    : Colors.black87,
-                                fontSize: 16.0,
+                                    ? primaryColor
+                                    : const Color(0xFFE8E8EE),
+                                tail: true,
+                                textStyle: GoogleFonts.lato(
+                                  color: chatController.messages[i].userId ==
+                                          storage.read("userid").toString()
+                                      ? Colors.white
+                                      : Colors.black87,
+                                  fontSize: 16.0,
+                                ),
+                                delivered: true,
                               ),
-                              delivered: true,
-                            ),
-                          ] else ...[
-                            ImageBubble(
-                              isSender: chatController.messages[i].userId ==
-                                      storage.read("userid").toString()
-                                  ? true
-                                  : false,
-                            ),
-                          ]
+                            ] else ...[
+                              ImageBubble(
+                                seen: true,
+                                isSender: chatController.messages[i].userId ==
+                                        storage.read("userid").toString()
+                                    ? true
+                                    : false,
+                              ),
+                            ]
+                          ],
                         ],
-
-                        /*DateChip(
-                        date: DateTime(now.year, now.month, now.day - 2),
-                      ),
-                      BubbleNormal(
-                        text:
-                            'Lorem ipsum dolor sit amet consectetur adipisicing elit!',
-                        isSender: false,
-                        color: primaryColor,
-                        tail: false,
-                        textStyle: GoogleFonts.lato(
-                          color: Colors.white,
-                        ),
-                      ),
-                      BubbleNormal(
-                        text:
-                            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto quam natus provident!',
-                        color: const Color(0xFFE8E8EE),
-                        tail: false,
-                        sent: true,
-                        seen: true,
-                        delivered: true,
-                        textStyle: GoogleFonts.lato(
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      BubbleSpecialOne(
-                        text: 'Architecto quam natus provident!',
-                        isSender: false,
-                        color: primaryColor,
-                        textStyle: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      DateChip(
-                        date: DateTime(now.year, now.month, now.day - 1),
-                      ),
-                      BubbleSpecialOne(
-                        text: 'bubble special one with tail',
-                        color: const Color(0xFFE8E8EE),
-                        textStyle: GoogleFonts.lato(
-                          fontSize: 16.0,
-                        ),
-                        seen: true,
-                      ),
-                      BubbleSpecialOne(
-                        text: 'bubble special one without tail',
-                        isSender: false,
-                        tail: false,
-                        color: primaryColor,
-                        textStyle: GoogleFonts.lato(
-                          color: Colors.white,
-                        ),
-                      ),
-                      const BubbleSpecialOne(
-                        text: 'bubble special one without tail',
-                        tail: false,
-                        color: Color(0xFFE8E8EE),
-                        sent: true,
-                      ),
-                      BubbleSpecialTwo(
-                        text: 'bubble special tow with tail',
-                        isSender: false,
-                        color: primaryColor,
-                        textStyle: GoogleFonts.lato(
-                          color: Colors.white,
-                        ),
-                      ),
-                      DateChip(
-                        date: now,
-                      ),
-                      const BubbleSpecialTwo(
-                        text: 'bubble special tow with tail',
-                        isSender: true,
-                        color: Color(0xFFE8E8EE),
-                        sent: true,
-                      ),
-                      BubbleSpecialTwo(
-                        text: 'bubble special tow without tail',
-                        isSender: false,
-                        tail: false,
-                        color: primaryColor,
-                        textStyle: GoogleFonts.lato(
-                          color: Colors.white,
-                        ),
-                      ),
-                      const BubbleSpecialTwo(
-                        text: 'bubble special tow without tail',
-                        tail: false,
-                        color: Color(0xFFE8E8EE),
-                        delivered: true,
-                      ),
-                      ImageBubble(
-                        isSender: true,
-                      ),*/
-                      ],
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
               ),
             ),
@@ -269,6 +185,9 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width,
                       child: TextField(
+                        controller: textMessage,
+                        autofocus: false,
+                        focusNode: inputNode,
                         style: const TextStyle(fontSize: 14.0),
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -325,6 +244,8 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                                                       .readAsBytesSync();
                                               var strImage =
                                                   base64Encode(imageBytes);
+                                              await sendMedia(
+                                                  context, strImage);
                                             }
                                           },
                                         ),
@@ -343,6 +264,8 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                                                       .readAsBytesSync();
                                               var strImage =
                                                   base64Encode(imageBytes);
+                                              await sendMedia(
+                                                  context, strImage);
                                             }
                                           },
                                         )
@@ -381,7 +304,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                     width: 5.0,
                   ),
                   CustomGradientIconBtn(
-                    onPressed: () {},
+                    onPressed: () => sendMessage(context),
                     icon: Icons.send_rounded,
                     iconColor: Colors.white,
                     gradient: LinearGradient(
@@ -481,49 +404,43 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
       ),
     );
   }
-}
 
-class ImageBubble extends StatelessWidget {
-  final bool isSender;
-  final String image;
-  final Function onPressed;
-  const ImageBubble({
-    Key key,
-    this.isSender = false,
-    this.image,
-    this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: isSender ? Alignment.centerLeft : Alignment.centerRight,
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 10.0,
-          vertical: 5.0,
-        ),
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: isSender
-                  ? primaryColor.withOpacity(.15)
-                  : Colors.black.withOpacity(.1),
-              blurRadius: 12.0,
-              offset: const Offset(0, 3),
-            )
-          ],
-          image: const DecorationImage(
-            image: AssetImage("assets/shapes/placeholder.png"),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        height: 120,
-        width: 200.0,
-      ),
+  Future<void> sendMessage(context) async {
+    FocusScope.of(context).requestFocus(inputNode);
+    if (textMessage.text.isEmpty) {
+      Get.snackbar(
+        "Avertissement",
+        "vous devez taper votre message !",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.black87,
+        maxWidth: MediaQuery.of(context).size.width - 2,
+        borderRadius: 10,
+        duration: const Duration(seconds: 5),
+      );
+      return;
+    }
+    Chat message = Chat(
+      chatId: widget.chatId,
+      message: textMessage.text,
+      userId: storage.read("userid"),
     );
+    await ApiManager.chatService(chat: message).then((res) {
+      print(res);
+    });
+  }
+
+  Future<void> sendMedia(context, String media) async {
+    FocusScope.of(context).requestFocus(inputNode);
+
+    Chat message = Chat(
+      chatId: widget.chatId,
+      media: media,
+      userId: storage.read("userid"),
+    );
+    await ApiManager.chatService(chat: message).then((res) {
+      print(res);
+    });
   }
 }
 

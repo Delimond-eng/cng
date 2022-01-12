@@ -4,6 +4,7 @@ import 'package:cng/components/custom_header.dart';
 import 'package:cng/components/user_session_component.dart';
 import 'package:cng/constants/global.dart';
 import 'package:cng/models/user_product_model.dart';
+import 'package:cng/pages/messages/widgets/custom_cache_image.dart';
 import 'package:cng/services/api_manager.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -87,9 +88,10 @@ class OfferViewPage extends StatelessWidget {
                                 ? DecorationImage(
                                     scale: 1.5,
                                     fit: BoxFit.cover,
-                                    image: MemoryImage(
-                                      base64Decode(produits
+                                    image: CacheImageProvider(
+                                      img: base64Decode(produits
                                           .produitDetails.images[0].media),
+                                      tag: produits.produitId,
                                     ),
                                   )
                                 : const DecorationImage(

@@ -20,11 +20,7 @@ List<String> strSpliter(String date) {
 Future<PickedFile> takePhoto({ImageSource src}) async {
   final ImagePicker _picker = ImagePicker();
   // ignore: deprecated_member_use
-  final pickedFile = await _picker.getImage(
-    source: src,
-    maxHeight: 400,
-    maxWidth: 400,
-  );
+  final pickedFile = await _picker.getImage(source: src, imageQuality: 90);
 
   if (pickedFile != null) {
     return pickedFile;
@@ -54,6 +50,22 @@ String chatDateParse(String strdate) {
     return 'Hier';
   } else {
     return DateFormat.yMMMd("fr_FR").format(date);
+  }
+}
+
+String msgDate(String strdate) {
+  final DateFormat _formatter = (strdate.contains("-"))
+      ? DateFormat('dd-MM-yyyy')
+      : DateFormat('dd/MM/yyyy');
+  DateTime date = _formatter.parse(strdate.trim().split("|")[1].trim());
+  final now = DateTime.now();
+  if (_formatter.format(now) == _formatter.format(date)) {
+    return strdate.trim().split("|")[0].trim();
+  } else if (_formatter.format(DateTime(now.year, now.month, now.day - 1)) ==
+      _formatter.format(date)) {
+    return "Hier";
+  } else {
+    return '${DateFormat('dd').format(date)}/${DateFormat('MM').format(date)}';
   }
 }
 

@@ -21,7 +21,6 @@ class MessagesViewPage extends StatefulWidget {
 }
 
 class _MessagesViewPageState extends State<MessagesViewPage> {
-  
   Stream<List<Chats>> get streamMessages async* {
     while (true) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -103,6 +102,7 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                                                           .toString())
                                                   .nom,
                                               chatId: data.chatId,
+                                              produitId: data.produitId,
                                             ),
                                             type: PageTransitionType
                                                 .leftToRightWithFade,

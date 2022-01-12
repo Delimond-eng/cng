@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:cng/components/photo_view.dart';
+import 'package:cng/constants/global.dart';
 import 'package:cng/constants/style.dart';
+import 'package:cng/models/chat_model.dart';
 import 'package:cng/pages/messages/widgets/custom_cache_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,18 +13,16 @@ class ImageBubble extends StatelessWidget {
   final bool sent;
   final bool delivered;
   final bool seen;
-  final String image;
-  final String time;
   final Function onPressed;
+  final Messages data;
   const ImageBubble({
     Key key,
     this.isSender = false,
-    this.image,
     this.onPressed,
     this.sent = false,
     this.delivered = false,
     this.seen = false,
-    this.time,
+    this.data,
   }) : super(key: key);
 
   @override
@@ -72,17 +73,38 @@ class ImageBubble extends StatelessWidget {
               width: 250.0,
               height: 155,
               decoration: BoxDecoration(
-                image: image != null && image.length < 200
+                image: data.media != null && data.media.length < 200
                     ? const DecorationImage(
                         image: AssetImage("assets/shapes/placeholder.png"),
                         fit: BoxFit.cover,
                       )
                     : DecorationImage(
                         image: CacheImageProvider(
-                            img: base64Decode(image), tag: time),
+                            img: base64Decode(data.media), tag: data.messageId),
                         fit: BoxFit.cover,
                       ),
                 borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Material(
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(15.0),
+                  onTap: () {
+                    if (data.media.length > 200) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PhotoViewer(
+                            tag: data.messageId,
+                            image: data.media,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(),
+                ),
               ),
             ),
             Positioned(
@@ -91,7 +113,7 @@ class ImageBubble extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    time,
+                    msgDate(data.dateEnregistrement.trim()),
                     style: GoogleFonts.lato(
                       color: Colors.grey[500],
                       fontSize: 10.0,

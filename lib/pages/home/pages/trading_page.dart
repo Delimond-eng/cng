@@ -5,8 +5,10 @@ import 'package:cng/components/user_session_component.dart';
 import 'package:cng/constants/controllers.dart';
 import 'package:cng/constants/global.dart';
 import 'package:cng/constants/style.dart';
+import 'package:cng/models/chat.dart';
 import 'package:cng/models/products_model.dart';
 import 'package:cng/models/single_product_model.dart';
+import 'package:cng/pages/messages/pages/chat_details_page.dart';
 import 'package:cng/screens/auth/auth_login.dart';
 import 'package:cng/services/api_manager.dart';
 import 'package:cng/utils/dialog.dart';
@@ -33,6 +35,7 @@ class _TradingPageState extends State<TradingPage> {
   final _formOffreKey = GlobalKey<FormState>();
   final _textOffreMontant = TextEditingController();
   bool isGridView = true;
+  final textMessage = TextEditingController();
 
   @override
   void dispose() {
@@ -165,6 +168,61 @@ class _TradingPageState extends State<TradingPage> {
     );
   }
 
+  Future<void> sendMessage(context) async {
+    var userId = storage.read("userid");
+    if (userId == null) {
+      Navigator.push(
+        context,
+        PageTransition(
+          child: AuthLogin(),
+          type: PageTransitionType.bottomToTop,
+        ),
+      );
+      return;
+    }
+    if (textMessage.text.isEmpty) {
+      Get.snackbar(
+        "Avertissement",
+        "vous devez taper votre message !",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.black87,
+        maxWidth: MediaQuery.of(context).size.width - 2,
+        borderRadius: 10,
+        duration: const Duration(seconds: 5),
+      );
+      return;
+    }
+    Chat chat = Chat(
+      produitId: widget.product.produitId,
+      message: textMessage.text,
+      userId: storage.read("userid"),
+    );
+    //hide keyboard
+    FocusScope.of(context).unfocus();
+    Xloading.showLoading(context);
+    await ApiManager.chatService(chat: chat).then((res) {
+      Xloading.dismiss();
+      print(res);
+      setState(() {
+        textMessage.text = "";
+      });
+      if (res["reponse"]["status"] == "success") {
+        Navigator.push(
+          context,
+          PageTransition(
+            child: ChatDetailsPage(
+              messageSender: "Nouvelle discussion",
+              produitId: widget.product.produitId,
+              chatId: res["reponse"]["chat_id"],
+            ),
+            type: PageTransitionType.rightToLeftWithFade,
+          ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -200,7 +258,7 @@ class _TradingPageState extends State<TradingPage> {
                         headerStack(),
                         /**/
                         const SizedBox(
-                          height: 60.0,
+                          height: 65.0,
                         ),
                         Expanded(
                           child: Container(
@@ -386,6 +444,7 @@ class _TradingPageState extends State<TradingPage> {
                                           height: 15.0,
                                         ),
                                         TextField(
+                                          controller: textMessage,
                                           decoration: InputDecoration(
                                             labelText: "Message",
                                             hintText: 'Entrez votre message...',
@@ -434,7 +493,8 @@ class _TradingPageState extends State<TradingPage> {
                                               style: GoogleFonts.lato(
                                                   color: Colors.white),
                                             ),
-                                            onPressed: () {},
+                                            onPressed: () =>
+                                                sendMessage(context),
                                           ),
                                         )
                                       ],

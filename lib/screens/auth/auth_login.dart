@@ -48,12 +48,12 @@ class _AuthLoginState extends State<AuthLogin> {
           child: SafeArea(
             child: SingleChildScrollView(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 3.85),
+                  top: MediaQuery.of(context).size.height / 2.60),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  /*Container(
                     height: 100,
                     child: Stack(
                       overflow: Overflow.visible,
@@ -75,7 +75,7 @@ class _AuthLoginState extends State<AuthLogin> {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Text(

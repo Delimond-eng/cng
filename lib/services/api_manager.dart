@@ -115,6 +115,15 @@ class ApiManager {
     } catch (err) {
       print("error from chating $err");
     }
+    if (response != null) {
+      var json = jsonDecode(response);
+      if (json["error"] != null) {
+        return null;
+      }
+      return json;
+    } else {
+      return null;
+    }
   }
 
   static Future<ChatModel> viewChats() async {

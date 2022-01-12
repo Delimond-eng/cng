@@ -86,11 +86,11 @@ class OfferViewPage extends StatelessWidget {
                             border: Border.all(color: Colors.yellow[900]),
                             image: produits.produitDetails.images.isNotEmpty
                                 ? DecorationImage(
-                                    scale: 1.5,
                                     fit: BoxFit.cover,
                                     image: CacheImageProvider(
-                                      img: base64Decode(produits
-                                          .produitDetails.images[0].media),
+                                      img: base64Decode(
+                                        produits.produitDetails.images[0].media,
+                                      ),
                                       tag: produits.produitId,
                                     ),
                                   )

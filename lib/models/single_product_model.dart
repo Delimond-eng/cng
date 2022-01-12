@@ -21,7 +21,9 @@ class SingleProductModel {
 class SingleData {
   ProduitDetails produitDetails;
 
-  SingleData({this.produitDetails});
+  SingleData({
+    this.produitDetails,
+  });
 
   SingleData.fromJson(Map<String, dynamic> json) {
     produitDetails = json['produit_details'] != null
@@ -38,13 +40,40 @@ class SingleData {
   }
 }
 
+class User {
+  String nom;
+  String email;
+  String telephone;
+  int cote;
+
+  User({this.nom, this.email, this.telephone, this.cote});
+
+  User.fromJson(Map<String, dynamic> json) {
+    nom = json['nom'];
+    email = json['email'];
+    telephone = json['telephone'];
+    cote = json['cote'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['nom'] = this.nom;
+    data['email'] = this.email;
+    data['telephone'] = this.telephone;
+    data['cote'] = this.cote;
+    return data;
+  }
+}
+
 class ProduitDetails {
+  User user;
   List<Details> details;
   List<Images> images;
 
-  ProduitDetails({this.details, this.images});
+  ProduitDetails({this.details, this.images, this.user});
 
   ProduitDetails.fromJson(Map<String, dynamic> json) {
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
     if (json['details'] != null) {
       details = new List<Details>();
       json['details'].forEach((v) {
@@ -61,6 +90,9 @@ class ProduitDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
+    }
     if (this.details != null) {
       data['details'] = this.details.map((v) => v.toJson()).toList();
     }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cng/components/custom_header.dart';
+import 'package:cng/components/photo_view.dart';
 import 'package:cng/components/user_session_component.dart';
 import 'package:cng/constants/controllers.dart';
 import 'package:cng/constants/global.dart';
@@ -15,6 +16,7 @@ import 'package:cng/utils/dialog.dart';
 import 'package:cng/widgets/trade_little_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
@@ -76,42 +78,64 @@ class _TradingPageState extends State<TradingPage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                TextFormField(
-                  controller: _textOffreMontant,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Le montant de votre offre est réquis !";
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: "Montant d'offre",
-                    hintText: 'Entrez le montant...',
-                    prefixIcon: Icon(
-                      CupertinoIcons.money_dollar_circle_fill,
-                      color: Colors.yellow[900],
-                      size: 16.0,
-                    ),
-                    fillColor: Colors.white,
-                    border: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black54,
-                        width: 1.0,
+                Row(
+                  children: [
+                    Flexible(
+                      child: TextFormField(
+                        controller: _textOffreMontant,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Le montant de votre offre est réquis !";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: "Montant d'offre",
+                          hintText: 'Entrez le montant...',
+                          prefixIcon: Icon(
+                            CupertinoIcons.money_dollar_circle_fill,
+                            color: Colors.yellow[900],
+                            size: 16.0,
+                          ),
+                          fillColor: Colors.white,
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black54,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.zero,
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black54, width: 1.0),
+                            borderRadius: BorderRadius.zero,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: primaryColor,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
                       ),
-                      borderRadius: BorderRadius.zero,
                     ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black54, width: 1.0),
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primaryColor,
-                        width: 1.0,
+                    Container(
+                      height: 60.0,
+                      width: 60.0,
+                      color: Colors.grey[500],
+                      child: Center(
+                        child: Text(
+                          widget.product.devise,
+                          style: GoogleFonts.lato(
+                            color: Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
+                    )
+                  ],
                 ),
                 const SizedBox(
                   height: 10.0,
@@ -207,17 +231,31 @@ class _TradingPageState extends State<TradingPage> {
       setState(() {
         textMessage.text = "";
       });
+
       if (res["reponse"]["status"] == "success") {
+        String chatId = res['reponse']['chat_id'].toString();
+        chatController.messages.clear();
         Navigator.push(
           context,
           PageTransition(
             child: ChatDetailsPage(
               messageSender: "Nouvelle discussion",
               produitId: widget.product.produitId,
-              chatId: res["reponse"]["chat_id"],
+              chatId: chatId,
             ),
             type: PageTransitionType.rightToLeftWithFade,
           ),
+        );
+      } else {
+        Get.snackbar(
+          "Info",
+          "Cette discussion est en cours... !",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.blue,
+          maxWidth: MediaQuery.of(context).size.width - 2,
+          borderRadius: 10,
+          duration: const Duration(seconds: 5),
         );
       }
     });
@@ -433,9 +471,11 @@ class _TradingPageState extends State<TradingPage> {
                                                           5.0)),
                                               child: Center(
                                                 child: Text(
-                                                    "Le produit est-il toujours disponible ?",
-                                                    style: GoogleFonts.lato(
-                                                        fontSize: 12)),
+                                                  "Le produit est-il toujours disponible ?",
+                                                  style: GoogleFonts.lato(
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -454,14 +494,15 @@ class _TradingPageState extends State<TradingPage> {
                                               size: 16.0,
                                             ),
                                             fillColor: Colors.white,
-                                            border: OutlineInputBorder(
-                                              borderSide: const BorderSide(
+                                            border: const OutlineInputBorder(
+                                              borderSide: BorderSide(
                                                   color: Colors.black54,
                                                   width: 1.0),
                                               borderRadius: BorderRadius.zero,
                                             ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderSide: BorderSide(
                                                   color: Colors.black54,
                                                   width: 1.0),
                                               borderRadius: BorderRadius.zero,
@@ -801,7 +842,7 @@ class _TradingPageState extends State<TradingPage> {
     );
   }
 
-  Padding buildFournisseurInfos() {
+  Widget buildFournisseurInfos() {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 15.0,
@@ -813,17 +854,23 @@ class _TradingPageState extends State<TradingPage> {
             overflow: Overflow.visible,
             children: [
               Container(
-                height: 60.0,
-                width: 60.0,
+                height: 80.0,
+                width: 80.0,
                 decoration: BoxDecoration(
                   color: primaryColor.withOpacity(.7),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: const Icon(
-                    CupertinoIcons.person,
-                    color: Colors.white,
-                    size: 18.0,
+                  child: Text(
+                    managerController
+                        .singleProduct.value.produitDetails.user.nom
+                        .substring(0, 1)
+                        .toUpperCase(),
+                    style: GoogleFonts.lato(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
               ),
@@ -849,7 +896,7 @@ class _TradingPageState extends State<TradingPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Gaston Delimond",
+                managerController.singleProduct.value.produitDetails.user.nom,
                 style: GoogleFonts.lato(
                   color: primaryColor,
                   fontWeight: FontWeight.w900,
@@ -857,9 +904,83 @@ class _TradingPageState extends State<TradingPage> {
                 ),
               ),
               const SizedBox(
+                height: 2.0,
+              ),
+              RatingBar.builder(
+                wrapAlignment: WrapAlignment.center,
+                initialRating: managerController
+                    .singleProduct.value.produitDetails.user.cote
+                    .toDouble(),
+                minRating: 1,
+                direction: Axis.horizontal,
+                itemSize: 10.0,
+                allowHalfRating: false,
+                ignoreGestures: true,
+                unratedColor: Colors.transparent,
+                itemCount: 3,
+                itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.orange.withOpacity(.7),
+                ),
+                updateOnDrag: false,
+                onRatingUpdate: (double value) {},
+              ),
+              const SizedBox(
                 height: 4.0,
               ),
-              Container(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        CupertinoIcons.mail,
+                        size: 12,
+                      ),
+                      const SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        managerController
+                            .singleProduct.value.produitDetails.user.email,
+                        style: GoogleFonts.lato(
+                          color: Colors.blue,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        CupertinoIcons.phone,
+                        size: 12,
+                      ),
+                      const SizedBox(
+                        width: 5.0,
+                      ),
+                      Text(
+                        managerController
+                            .singleProduct.value.produitDetails.user.telephone,
+                        style: GoogleFonts.lato(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              /*Container(
                 padding: const EdgeInsets.all(4.0),
                 decoration: BoxDecoration(
                     color: Colors.grey[200],
@@ -885,7 +1006,7 @@ class _TradingPageState extends State<TradingPage> {
                     ),
                   ],
                 ),
-              )
+              )*/
             ],
           )
         ],
@@ -978,6 +1099,25 @@ class _TradingPageState extends State<TradingPage> {
                                   offset: const Offset(0.0, 10.0),
                                 )
                               ],
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  if (image.media.length > 200) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PhotoViewer(
+                                          tag: image.produitMediaId,
+                                          image: image.media,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Container(),
+                              ),
                             ),
                           );
                         },
@@ -1219,7 +1359,9 @@ class DetailCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  data.produitDetail.isEmpty ? "vide !" : data.produitDetail,
+                  data.produitDetail.isEmpty
+                      ? "vide !"
+                      : truncateStringWithPoint(data.produitDetail, 15),
                   style: GoogleFonts.lato(
                     color: Colors.black54,
                     fontSize: 16.0,

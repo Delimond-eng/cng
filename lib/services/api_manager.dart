@@ -115,6 +115,7 @@ class ApiManager {
     } catch (err) {
       print("error from chating $err");
     }
+    print(response);
     if (response != null) {
       var json = jsonDecode(response);
       if (json["error"] != null) {

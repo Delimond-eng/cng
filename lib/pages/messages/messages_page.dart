@@ -76,6 +76,7 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                                 thickness: 4.0,
                                 child: ListView.builder(
                                   itemCount: snapshot.data.length,
+                                  physics: const BouncingScrollPhysics(),
                                   shrinkWrap: true,
                                   padding: const EdgeInsets.only(
                                     left: 15.0,

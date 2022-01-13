@@ -31,7 +31,7 @@ class ImageBubble extends StatelessWidget {
     Icon stateIcon;
     if (sent) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done,
         size: 18,
         color: Color(0xFF97AD8E),
@@ -39,7 +39,7 @@ class ImageBubble extends StatelessWidget {
     }
     if (delivered) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done_all,
         size: 18,
         color: Color(0xFF97AD8E),
@@ -47,14 +47,14 @@ class ImageBubble extends StatelessWidget {
     }
     if (seen) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done_all,
         size: 18,
         color: Color(0xFF92DEDA),
       );
     }
     return Align(
-      alignment: isSender ? Alignment.centerLeft : Alignment.centerRight,
+      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(
           horizontal: 10.0,

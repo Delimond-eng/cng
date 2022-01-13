@@ -43,7 +43,7 @@ class ManagerController extends GetxController {
       homeProducts.value = data.reponse.produits;
     });*/
     //await viewConfigDatas();
-    await viewOwnProductsAndServices();
+    //await viewOwnProductsAndServices();
     //await viewOwnOffers();
   }
 

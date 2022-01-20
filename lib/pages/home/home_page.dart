@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cng/models/menu_config_model.dart';
 import 'package:cng/models/products_model.dart';
 import 'package:cng/services/api_manager.dart';
@@ -82,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                               Container(
                                 decoration: BoxDecoration(
                                   color: Colors.yellow[800].withOpacity(.7),
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(.3),
@@ -191,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                 width: 90.0,
                                 decoration: BoxDecoration(
                                   color: Colors.yellow[800].withOpacity(.7),
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(.3),
@@ -233,34 +232,40 @@ class _HomePageState extends State<HomePage> {
                           future: ApiManager.viewHomeDatas(),
                           builder: (context, snapshot) {
                             if (snapshot.data == null) {
-                              return GridView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5.0, horizontal: 15.0),
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 0.8,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  crossAxisCount: 2,
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey[300],
+                                highlightColor: Colors.white,
+                                enabled: true,
+                                child: GridView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5.0, horizontal: 15.0),
+                                  shrinkWrap: true,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: .95,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                    crossAxisCount: 2,
+                                  ),
+                                  itemCount: 4,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(.1),
+                                            blurRadius: 12.0,
+                                            offset: const Offset(0.0, 10.0),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
-                                itemCount: 4,
-                                itemBuilder: (context, index) {
-                                  return Shimmer(
-                                    enabled: true,
-                                    direction: ShimmerDirection.ttb,
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        primaryColor.withOpacity(.1),
-                                        Colors.white.withOpacity(.7),
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                    ),
-                                    child: psShimmer(context),
-                                  );
-                                },
                               );
                             } else {
                               return (isGridView)
@@ -345,44 +350,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget psShimmer(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.9),
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.1),
-            blurRadius: 12.0,
-            offset: const Offset(0.0, 10.0),
-          )
-        ],
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(.9),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 120.0,
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/shapes/placeholder.png"),
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

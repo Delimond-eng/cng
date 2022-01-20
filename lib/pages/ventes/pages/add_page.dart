@@ -93,7 +93,7 @@ class _AddVentePageState extends State<AddVentePage>
     );
   }
 
-  Expanded tabBody() {
+  Widget tabBody() {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),

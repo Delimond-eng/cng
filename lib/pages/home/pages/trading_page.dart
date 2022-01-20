@@ -677,35 +677,45 @@ class _TradingPageState extends State<TradingPage> {
                                     future: ApiManager.viewHomeDatas(),
                                     builder: (context, snapshot) {
                                       if (snapshot.data == null) {
-                                        return GridView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 5.0, horizontal: 15.0),
-                                          shrinkWrap: true,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            childAspectRatio: 0.8,
-                                            crossAxisSpacing: 10,
-                                            mainAxisSpacing: 10,
-                                            crossAxisCount: 2,
+                                        return Shimmer.fromColors(
+                                          baseColor: Colors.grey[300],
+                                          highlightColor: Colors.white,
+                                          enabled: true,
+                                          child: GridView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5.0,
+                                                horizontal: 15.0),
+                                            shrinkWrap: true,
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              childAspectRatio: 0.95,
+                                              crossAxisSpacing: 10,
+                                              mainAxisSpacing: 10,
+                                              crossAxisCount: 2,
+                                            ),
+                                            itemCount: 4,
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[200],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(.1),
+                                                      blurRadius: 12.0,
+                                                      offset: const Offset(
+                                                          0.0, 10.0),
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          itemCount: 4,
-                                          itemBuilder: (context, index) {
-                                            return Shimmer(
-                                              enabled: true,
-                                              direction: ShimmerDirection.ttb,
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  primaryColor.withOpacity(.1),
-                                                  Colors.white.withOpacity(.8),
-                                                ],
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                              ),
-                                              child: psShimmer(context),
-                                            );
-                                          },
                                         );
                                       } else {
                                         return (isGridView)
@@ -981,34 +991,6 @@ class _TradingPageState extends State<TradingPage> {
                   ),
                 ],
               ),
-
-              /*Container(
-                padding: const EdgeInsets.all(4.0),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      color: Colors.yellow[900],
-                      size: 15.0,
-                    ),
-                    const SizedBox(
-                      width: 5.0,
-                    ),
-                    Text(
-                      "RD Congo, kinshasa",
-                      style: GoogleFonts.lato(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              )*/
             ],
           )
         ],

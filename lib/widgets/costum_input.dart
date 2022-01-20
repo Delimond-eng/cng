@@ -91,7 +91,6 @@ class _CostumInputState extends State<CostumInput> {
                   style: const TextStyle(fontSize: 14.0),
                   keyboardType: widget.keyType ?? TextInputType.text,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(top: 10, bottom: 10),
                     hintText: widget.hintText,
                     hintStyle:
                         GoogleFonts.lato(color: Colors.black54, fontSize: 12.0),

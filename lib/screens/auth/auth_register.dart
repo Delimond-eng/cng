@@ -47,55 +47,24 @@ class _AuthRegisterState extends State<AuthRegister> {
           ),
           child: SafeArea(
             child: SingleChildScrollView(
-              padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 14),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 4.7),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    alignment: Alignment.topCenter,
-                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 100,
-                          child: Stack(
-                            overflow: Overflow.visible,
-                            children: [
-                              Positioned(
-                                top: -40,
-                                left: -10,
-                                child: Container(
-                                  height: 200.0,
-                                  width: 200.0,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/icons/logo_white.png"),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            "Veuillez créer à votre compte !",
-                            style: GoogleFonts.lato(
-                              color: Colors.grey[200],
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w300,
-                              letterSpacing: 1.0,
-                            ),
-                          ),
-                        )
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                    ),
+                    child: Text(
+                      "Veuillez créer à votre compte !",
+                      style: GoogleFonts.lato(
+                        color: Colors.grey[200],
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w300,
+                        letterSpacing: 1.0,
+                      ),
                     ),
                   ),
                   Container(
@@ -108,7 +77,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(.8),
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(30.0),
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 12.0,
@@ -129,6 +98,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                           child: Column(
                             children: [
                               CostumInput(
+                                radius: 30.0,
                                 hintText: "Nom complet",
                                 icon: CupertinoIcons.person,
                                 isPassWord: false,
@@ -139,6 +109,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                                 height: 10.0,
                               ),
                               CostumInput(
+                                radius: 30.0,
                                 hintText: "Email",
                                 icon: CupertinoIcons.envelope,
                                 isPassWord: false,
@@ -149,6 +120,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                                 height: 10.0,
                               ),
                               CostumInput(
+                                radius: 30.0,
                                 hintText: "N° de téléphone",
                                 isPassWord: false,
                                 icon: CupertinoIcons.phone,
@@ -159,6 +131,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                                 height: 10.0,
                               ),
                               CostumInput(
+                                radius: 30.0,
                                 hintText: "Mot de passe",
                                 isPassWord: true,
                                 errorText: "mot de passe réquis !",
@@ -212,7 +185,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                                     }
                                   },
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                    borderRadius: BorderRadius.circular(30.0),
                                   ),
                                   color: Colors.yellow[900],
                                   child: Text(

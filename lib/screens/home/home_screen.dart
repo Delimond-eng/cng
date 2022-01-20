@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:cng/constants/global.dart';
 import 'package:cng/pages/favorites/favorite_page.dart';
 import 'package:cng/pages/home/index.dart';

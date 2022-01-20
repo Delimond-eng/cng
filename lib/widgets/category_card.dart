@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cng/models/menu_config_model.dart';
 
 import '../index.dart';
@@ -13,80 +15,65 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 5.0),
+      height: 80.0,
+      width: 80.0,
+      margin: const EdgeInsets.only(right: 8.0),
       decoration: BoxDecoration(
-        image: const DecorationImage(
-          image: AssetImage("assets/shapes/shapebg.png"),
-          fit: BoxFit.cover,
-        ),
+        color: Colors.white.withOpacity(.9),
+        borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.1),
-            blurRadius: 10.0,
-            offset: const Offset(0, 5),
+            color: Colors.grey.withOpacity(.3),
+            blurRadius: 12.0,
+            offset: const Offset(0, 3),
           )
         ],
-        borderRadius: BorderRadius.circular(30.0),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(.9),
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        child: Material(
-          borderRadius: BorderRadius.circular(30.0),
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(30.0),
-            onTap: onPressed,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (data.categorieIcon.isNotEmpty) ...[
-                    Container(
-                      padding: const EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(.9),
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.network(
-                        data.categorieIcon,
-                        color: primaryColor,
-                        height: 30.0,
-                        width: 30.0,
-                      ),
-                    )
-                  ] else ...[
-                    Container(
-                      padding: const EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(.5),
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        "assets/icons/data-svgrepo-com.svg",
-                        color: Colors.grey[100],
-                        height: 20.0,
-                        width: 20.0,
-                      ),
-                    )
-                  ],
-                  const SizedBox(
-                    width: 8.0,
-                  ),
-                  Text(
-                    data.categorie,
-                    style: GoogleFonts.lato(
-                      color: primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14.0,
-                    ),
+      child: Material(
+        borderRadius: BorderRadius.circular(15.0),
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15.0),
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (data.categorieIcon != null &&
+                    data.categorieIcon.isNotEmpty) ...[
+                  SvgPicture.network(
+                    data.categorieIcon,
+                    color: Colors
+                        .primaries[Random().nextInt(Colors.primaries.length)]
+                        .shade900,
+                    height: 25.0,
+                    width: 25.0,
+                  )
+                ] else ...[
+                  SvgPicture.asset(
+                    "assets/icons/data-svgrepo-com.svg",
+                    color: primaryColor,
+                    height: 20.0,
+                    width: 20.0,
                   )
                 ],
-              ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Flexible(
+                  child: Text(
+                    data.categorie,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lato(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10.0,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ),

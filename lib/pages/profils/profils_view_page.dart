@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:badges/badges.dart';
 import 'package:cng/components/custom_header.dart';
 import 'package:cng/components/user_session_component.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +21,18 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: PageComponent(
+      gradient: LinearGradient(
+        colors: [
+          Colors.white,
+          Colors.white.withOpacity(.8),
+          Colors.white.withOpacity(.5),
+          Colors.transparent,
+          Colors.transparent,
+          Colors.transparent,
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
       child: Column(
         children: [
           buildHeader(),
@@ -31,23 +42,20 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 2.5,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  childAspectRatio: 1.2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
                   crossAxisCount: 2,
                 ),
                 children: [
                   ProfilTile(
-                    badgeVal: "0",
-                    badgeColor: primaryColor,
-                    badged: true,
-                    icon: CupertinoIcons.bell,
+                    icon: "assets/icons/bell-notification-svgrepo-com.svg",
                     label: "Notifications",
                     onPressed: () {},
                   ),
                   ProfilTile(
                     badged: false,
-                    icon: CupertinoIcons.cube_box,
+                    icon: "assets/icons/shopping-bag-svgrepo-com.svg",
                     label:
                         "Mes produits & services (${managerController.userProducts.length.toString().padLeft(2, "0")})",
                     onPressed: () {
@@ -62,19 +70,20 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
                   ),
                   ProfilTile(
                     badged: false,
-                    icon: CupertinoIcons.money_dollar_circle,
+                    icon: "assets/icons/wallet-svgrepo-com.svg",
                     label: "Ma balance",
                     onPressed: () {},
                   ),
                   ProfilTile(
                     badged: false,
-                    icon: CupertinoIcons.cube_box_fill,
+                    icon:
+                        "assets/icons/buy-company-merger-acquisition-company-sale-svgrepo-com.svg",
                     label: "Mes achats (0)",
                     onPressed: () {},
                   ),
                   ProfilTile(
                     badged: false,
-                    icon: CupertinoIcons.bell_circle_fill,
+                    icon: "assets/icons/marketing-svgrepo-com.svg",
                     label: "Mes offres envoyées (0)",
                     onPressed: () {
                       Navigator.push(
@@ -88,7 +97,7 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
                   ),
                   ProfilTile(
                     badged: false,
-                    icon: Icons.help_outline_sharp,
+                    icon: "assets/icons/help-svgrepo-com.svg",
                     label: "Aide",
                     onPressed: () {},
                   ),
@@ -155,7 +164,7 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
 class ProfilTile extends StatelessWidget {
   final String label, badgeVal;
   final Function onPressed;
-  final IconData icon;
+  final String icon;
   final bool badged;
   final Color color;
   final Color badgeColor;
@@ -175,8 +184,11 @@ class ProfilTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: (color == null) ? Colors.white : color,
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(10.0),
+        image: const DecorationImage(
+          image: AssetImage("assets/shapes/shapebg.jpg"),
+          fit: BoxFit.cover,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
@@ -185,72 +197,69 @@ class ProfilTile extends StatelessWidget {
           )
         ],
       ),
-      child: Material(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(5.0),
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (badged)
-                  Badge(
-                    badgeColor: badgeColor,
-                    badgeContent: Text(
-                      badgeVal,
-                      style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    child: Container(
-                      height: 40.0,
-                      width: 40.0,
-                      decoration: BoxDecoration(
-                          color: Colors.yellow[800],
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Center(
-                        child: Icon(
-                          icon,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                else
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.white.withOpacity(.8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.1),
+              offset: const Offset(0, 3),
+              blurRadius: 10.0,
+            )
+          ],
+        ),
+        child: Material(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10.0),
+            onTap: onPressed,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
                   Container(
-                    height: 40.0,
-                    width: 40.0,
+                    height: 60.0,
+                    width: 60.0,
+                    padding: const EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
-                        color: Colors
-                            .primaries[
-                                Random().nextInt(Colors.primaries.length)]
-                            .shade900,
-                        borderRadius: BorderRadius.circular(5)),
+                      color: Colors
+                          .primaries[Random().nextInt(Colors.primaries.length)]
+                          .shade900,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(.1),
+                          offset: const Offset(0, 3),
+                          blurRadius: 10.0,
+                        )
+                      ],
+                    ),
                     child: Center(
-                      child: Icon(
+                      child: SvgPicture.asset(
                         icon,
                         color: Colors.white,
                       ),
                     ),
                   ),
-                const SizedBox(
-                  width: 5.0,
-                ),
-                Flexible(
-                  child: Text(
-                    label,
-                    style: GoogleFonts.lato(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  const SizedBox(
+                    width: 15.0,
                   ),
-                )
-              ],
+                  Flexible(
+                    child: Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.lato(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

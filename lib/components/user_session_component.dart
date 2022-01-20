@@ -29,7 +29,7 @@ class UserSession extends StatelessWidget {
               width: 40.0,
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
-                color: Colors.green[700].withOpacity(.5),
+                color: Colors.green[700],
                 borderRadius: BorderRadius.circular(5.0),
                 boxShadow: [
                   BoxShadow(
@@ -139,8 +139,8 @@ class UserSession extends StatelessWidget {
                 value: 1,
                 child: Row(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(2, 2, 8, 2),
                       child: Icon(
                         Icons.logout_sharp,
                         size: 15,
@@ -159,10 +159,9 @@ class UserSession extends StatelessWidget {
                 value: 2,
                 child: Row(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
-                      child:
-                          const Icon(Icons.close, size: 18, color: Colors.pink),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(2, 2, 8, 2),
+                      child: Icon(Icons.close, size: 18, color: Colors.pink),
                     ),
                     Text(
                       "Fermer",
@@ -178,13 +177,14 @@ class UserSession extends StatelessWidget {
             height: 40.0,
             width: 40.0,
             decoration: BoxDecoration(
-              color: primaryColor,
+              color: Colors.blue,
               borderRadius: BorderRadius.circular(5.0),
               boxShadow: [
                 BoxShadow(
-                    blurRadius: 12.0,
-                    color: Colors.black.withOpacity(.2),
-                    offset: const Offset(0.0, 10.0))
+                  blurRadius: 12.0,
+                  color: Colors.black.withOpacity(.2),
+                  offset: const Offset(0.0, 10.0),
+                )
               ],
             ),
             child: Material(

@@ -53,29 +53,6 @@ class _AuthLoginState extends State<AuthLogin> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /*Container(
-                    height: 100,
-                    child: Stack(
-                      overflow: Overflow.visible,
-                      children: [
-                        Positioned(
-                          top: -35,
-                          left: 0,
-                          child: Container(
-                            height: 200.0,
-                            width: 200.0,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image:
-                                    AssetImage("assets/icons/logo_white.png"),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Text(
@@ -98,7 +75,7 @@ class _AuthLoginState extends State<AuthLogin> {
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(.8),
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(30.0),
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 12.0,
@@ -119,6 +96,7 @@ class _AuthLoginState extends State<AuthLogin> {
                           child: Column(
                             children: [
                               CostumInput(
+                                radius: 30.0,
                                 hintText: "Email / n° téléphone",
                                 icon: CupertinoIcons.person,
                                 isPassWord: false,
@@ -129,6 +107,7 @@ class _AuthLoginState extends State<AuthLogin> {
                                 height: 10.0,
                               ),
                               CostumInput(
+                                radius: 30.0,
                                 hintText: "Mot de passe",
                                 errorText: "mot de passe réquis !",
                                 isPassWord: true,
@@ -189,10 +168,10 @@ class _AuthLoginState extends State<AuthLogin> {
                                     }
                                   },
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                    borderRadius: BorderRadius.circular(30.0),
                                   ),
                                   color: Colors.yellow[900],
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.arrow_right_alt,
                                     color: Colors.white,
                                   ),

@@ -22,6 +22,7 @@ class ProductTradeLittleCard extends StatelessWidget {
           image: AssetImage("assets/shapes/shape2.jpg"),
           fit: BoxFit.cover,
         ),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
@@ -33,6 +34,7 @@ class ProductTradeLittleCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(.9),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Material(
           color: Colors.transparent,
@@ -45,9 +47,10 @@ class ProductTradeLittleCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 120.0,
+                  height: MediaQuery.of(context).size.height / 2,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
                     image: (product.image != null)
                         ? DecorationImage(
                             image: MemoryImage(base64Decode(product.image)),

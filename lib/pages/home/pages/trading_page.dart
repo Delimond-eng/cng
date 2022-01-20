@@ -810,6 +810,7 @@ class _TradingPageState extends State<TradingPage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.9),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
@@ -821,6 +822,7 @@ class _TradingPageState extends State<TradingPage> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(.9),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

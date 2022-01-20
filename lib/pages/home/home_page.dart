@@ -354,6 +354,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.9),
+        borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
@@ -365,6 +366,7 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(.9),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

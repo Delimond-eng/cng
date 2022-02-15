@@ -23,25 +23,12 @@ class Xloading {
             child: Dialog(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              child: Container(
-                width: 100,
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: SpinKitWave(
-                        color: Colors.yellow[900],
-                        size: 60.0,
-                      ),
-                    ),
-                  ),
+              child: Center(
+                child: Lottie.asset(
+                  "assets/lotties/90464-loading.json",
+                  height: 300.0,
+                  width: 300.0,
+                  animate: true,
                 ),
               ),
             ),
@@ -49,6 +36,46 @@ class Xloading {
         );
       },
     );
+  }
+
+  static showSuccessAnimation(context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.white12,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          contentPadding: const EdgeInsets.all(8.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          content: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(20.0),
+              decoration: const BoxDecoration(color: Colors.transparent),
+              alignment: Alignment.center,
+              width: 150.0,
+              height: 200.0,
+              child: Lottie.asset(
+                "assets/lotties/84741-success.json",
+                width: 150.0,
+                height: 150.0,
+                alignment: Alignment.center,
+                animate: true,
+                repeat: false,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 3), () {
+      Get.back();
+    });
   }
 
   static show(context, String title) {

@@ -78,96 +78,13 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow[800].withOpacity(.7),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(.3),
-                                      blurRadius: 12.0,
-                                      offset: const Offset(0, 3),
-                                    )
-                                  ],
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: const [
-                                          Icon(
-                                            Icons.view_array_rounded,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 5.0),
-                                          Text("Voir plus")
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              ViewMoreBtn(
+                                onPressed: () {},
                               )
                             ],
                           ),
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height * .35,
-                          child: FutureBuilder<ProductsModel>(
-                            future: ApiManager.viewHomeDatas(),
-                            builder: (context, snapshot) {
-                              if (snapshot.data == null) {
-                                return ListView.builder(
-                                  itemCount: 4,
-                                  padding: const EdgeInsets.only(
-                                      left: 20, bottom: 10.0, top: 10.0),
-                                  scrollDirection: Axis.horizontal,
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return rcShimmer(context);
-                                  },
-                                );
-                              } else {
-                                return ListView.builder(
-                                  itemCount:
-                                      snapshot.data.reponse.produits.length,
-                                  padding: const EdgeInsets.only(
-                                      left: 20, bottom: 10.0, top: 10.0),
-                                  scrollDirection: Axis.horizontal,
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    var data =
-                                        snapshot.data.reponse.produits[index];
-                                    return PromoProductCard(
-                                      product: data,
-                                      onPressed: () async {
-                                        Xloading.showLoading(context);
-                                        await managerController
-                                            .getSingleProduct(
-                                                produitId: data.produitId);
-                                        Xloading.dismiss();
-                                        await Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            child: TradingPage(
-                                              product: data,
-                                            ),
-                                            type: PageTransitionType
-                                                .rightToLeftWithFade,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                          ),
-                        ),
+                        buildRecommanderList(context),
                         Padding(
                           padding: const EdgeInsets.only(
                             left: 17.0,
@@ -187,10 +104,17 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Container(
-                                width: 90.0,
+                                width: 100.0,
                                 decoration: BoxDecoration(
-                                  color: Colors.yellow[800].withOpacity(.7),
-                                  borderRadius: BorderRadius.circular(10.0),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue,
+                                      primaryColor,
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  ),
+                                  borderRadius: BorderRadius.circular(25.0),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(.3),
@@ -201,7 +125,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: Material(
                                   color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(25.0),
                                   child: InkWell(
+                                    borderRadius: BorderRadius.circular(25.0),
                                     onTap: () {
                                       setState(() {
                                         isGridView = !isGridView;
@@ -210,15 +136,22 @@ class _HomePageState extends State<HomePage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Icon(
                                             isGridView
                                                 ? Icons.list
                                                 : Icons.grid_view,
                                             size: 15,
+                                            color: Colors.white,
                                           ),
                                           const SizedBox(width: 10.0),
-                                          Text(isGridView ? "Liste" : "Grid")
+                                          Text(
+                                            isGridView ? "Liste" : "Grid",
+                                            style: GoogleFonts.lato(
+                                                color: Colors.white),
+                                          )
                                         ],
                                       ),
                                     ),
@@ -351,6 +284,59 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildRecommanderList(BuildContext context) {
+    // ignore: sized_box_for_whitespace
+    return Container(
+      height: MediaQuery.of(context).size.height * .35,
+      child: FutureBuilder<ProductsModel>(
+        future: ApiManager.viewHomeDatas(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return ListView.builder(
+              itemCount: 4,
+              padding: const EdgeInsets.only(left: 20, bottom: 10.0, top: 10.0),
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return rcShimmer(context);
+              },
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data.reponse.produits.length,
+              padding: const EdgeInsets.only(left: 20, bottom: 10.0, top: 10.0),
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                var data = snapshot.data.reponse.produits[index];
+                return PromoProductCard(
+                  product: data,
+                  onPressed: () async {
+                    Xloading.showLoading(context);
+                    await managerController.getSingleProduct(
+                        produitId: data.produitId);
+                    Xloading.dismiss();
+                    await Navigator.push(
+                      context,
+                      PageTransition(
+                        child: TradingPage(
+                          product: data,
+                        ),
+                        type: PageTransitionType.rightToLeftWithFade,
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
@@ -552,11 +538,12 @@ class _HomePageState extends State<HomePage> {
             child: SingleChildScrollView(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+              scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
                   for (int i = 0; i < 4; i++) ...[
                     Container(
-                      width: 100.0,
+                      width: 80.0,
                       height: 80.0,
                       margin: const EdgeInsets.only(left: 5.0),
                       decoration: BoxDecoration(
@@ -600,6 +587,66 @@ class _HomePageState extends State<HomePage> {
           );
         }
       },
+    );
+  }
+}
+
+class ViewMoreBtn extends StatelessWidget {
+  final Function onPressed;
+  const ViewMoreBtn({
+    Key key,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.blue,
+            primaryColor,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.circular(25.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(.3),
+            blurRadius: 12.0,
+            offset: const Offset(0, 3),
+          )
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(25.0),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(25.0),
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.arrow_right_alt_rounded,
+                  size: 18,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 5.0),
+                Text(
+                  "Voir plus",
+                  style: GoogleFonts.lato(
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

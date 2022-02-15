@@ -19,7 +19,15 @@ class CategoryCard extends StatelessWidget {
       width: 80.0,
       margin: const EdgeInsets.only(right: 8.0),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.9),
+        gradient: LinearGradient(
+          colors: [
+            Colors
+                .primaries[Random().nextInt(Colors.primaries.length)].shade900,
+            primaryColor,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
         borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
@@ -45,16 +53,14 @@ class CategoryCard extends StatelessWidget {
                     data.categorieIcon.isNotEmpty) ...[
                   SvgPicture.network(
                     data.categorieIcon,
-                    color: Colors
-                        .primaries[Random().nextInt(Colors.primaries.length)]
-                        .shade900,
+                    color: Colors.white,
                     height: 25.0,
                     width: 25.0,
                   )
                 ] else ...[
                   SvgPicture.asset(
                     "assets/icons/data-svgrepo-com.svg",
-                    color: primaryColor,
+                    color: Colors.white,
                     height: 20.0,
                     width: 20.0,
                   )
@@ -67,7 +73,7 @@ class CategoryCard extends StatelessWidget {
                     data.categorie,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
-                      color: Colors.black87,
+                      color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 10.0,
                     ),

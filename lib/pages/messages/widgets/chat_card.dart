@@ -22,7 +22,7 @@ class ChatCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.8),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(30.0),
         boxShadow: [
           BoxShadow(
             blurRadius: 12.0,
@@ -33,9 +33,9 @@ class ChatCard extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(30.0),
         child: InkWell(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(30.0),
           onTap: onPressed,
           child: Stack(
             children: [
@@ -50,8 +50,8 @@ class ChatCard extends StatelessWidget {
                           height: 70.0,
                           width: 70.0,
                           decoration: BoxDecoration(
-                            color: primaryColor.withOpacity(.5),
-                            shape: BoxShape.circle,
+                            color: darkBlueColor,
+                            borderRadius: BorderRadius.circular(25.0),
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 12.0,
@@ -78,11 +78,11 @@ class ChatCard extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          bottom: 8,
+                          bottom: 5,
                           right: 0,
                           child: Container(
-                            height: 13.0,
-                            width: 13.0,
+                            height: 10.0,
+                            width: 10.0,
                             decoration: BoxDecoration(
                               color: Colors.yellow[900],
                               shape: BoxShape.circle,
@@ -124,19 +124,19 @@ class ChatCard extends StatelessWidget {
                           )
                         ] else ...[
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Icon(
                                 CupertinoIcons.photo_fill,
-                                size: 17.0,
+                                size: 12.0,
                                 color: accentColor,
                               ),
                               const SizedBox(
                                 width: 5,
                               ),
                               Text(
-                                "Photo",
+                                "Photo...",
                                 style: GoogleFonts.lato(
                                   fontWeight: FontWeight.w400,
                                   color: Colors.black87,
@@ -153,12 +153,32 @@ class ChatCard extends StatelessWidget {
               Positioned(
                 right: 10,
                 top: 20,
-                child: Text(
-                  msgDate(data.messages.last.dateEnregistrement.trim()),
-                  style: GoogleFonts.lato(
+                child: Container(
+                  decoration: BoxDecoration(
                     color: Colors.yellow[900],
-                    fontWeight: FontWeight.w800,
-                    fontSize: 12.0,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.access_time_filled_sharp,
+                        color: Colors.white,
+                        size: 12.0,
+                      ),
+                      const SizedBox(
+                        width: 4.0,
+                      ),
+                      Text(
+                        msgDate(data.messages.last.dateEnregistrement.trim()),
+                        style: GoogleFonts.lato(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               )

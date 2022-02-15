@@ -265,6 +265,16 @@ class _TradingPageState extends State<TradingPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: darkBlueColor,
+        child: const Icon(
+          CupertinoIcons.arrow_up_to_line_alt,
+          size: 18.0,
+          color: Colors.white,
+        ),
+        elevation: 10.0,
+        onPressed: () {},
+      ),
       body: ValueListenableBuilder<int>(
         valueListenable: sliderNotifier,
         builder: (context, slide, __) {
@@ -1128,11 +1138,13 @@ class _TradingPageState extends State<TradingPage> {
                     ),
                   Positioned(
                     top: 10.0,
-                    right: 10.0,
+                    left: 10.0,
                     child: Container(
                       padding: const EdgeInsets.all(8.0),
-                      decoration:
-                          BoxDecoration(color: primaryColor.withOpacity(.4)),
+                      decoration: BoxDecoration(
+                        color: darkBlueColor.withOpacity(.8),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                       child: Center(
                         child: Text(
                           widget.product.titre,
@@ -1143,9 +1155,8 @@ class _TradingPageState extends State<TradingPage> {
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    top: 60,
-                    bottom: 60,
+                    left: 8,
+                    top: 70,
                     child: SlideBtn(
                         icon: CupertinoIcons.chevron_left,
                         onSlided: () {
@@ -1161,9 +1172,8 @@ class _TradingPageState extends State<TradingPage> {
                         }),
                   ),
                   Positioned(
-                    right: 0,
-                    top: 60,
-                    bottom: 60,
+                    right: 8,
+                    top: 70,
                     child: SlideBtn(
                       icon: CupertinoIcons.chevron_right,
                       onSlided: () {
@@ -1254,26 +1264,30 @@ class SlideBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: AlignmentDirectional.center,
-      height: 70.0,
+      height: 50.0,
       width: 50.0,
       decoration: BoxDecoration(
-        color: Colors.black26,
+        color: primaryColor.withOpacity(.6),
+        borderRadius: BorderRadius.circular(50.0),
         boxShadow: [
           BoxShadow(
             blurRadius: 12.0,
-            color: Colors.black.withOpacity(.1),
-            offset: const Offset(0.0, 10.0),
+            color: Colors.black.withOpacity(.2),
+            offset: Offset.zero,
           ),
         ],
       ),
       child: Material(
+        borderRadius: BorderRadius.circular(50.0),
         color: Colors.transparent,
         child: InkWell(
+          borderRadius: BorderRadius.circular(50.0),
           onTap: onSlided,
           child: Center(
             child: Icon(
               icon,
               color: Colors.white,
+              size: 18.0,
             ),
           ),
         ),

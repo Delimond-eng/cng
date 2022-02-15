@@ -80,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPageChanged: _onItemTapped,
         children: pages,
         scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: AppBottomNavigation(
         selectedIndex: _selectedIndex,

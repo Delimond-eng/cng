@@ -36,8 +36,9 @@ class PromoProductCard extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width / 1.40,
                 decoration: BoxDecoration(
+                  color: primaryColor.withOpacity(.2),
                   borderRadius: BorderRadius.circular(15.0),
-                  image: (product.image != null)
+                  image: (product.image != null && product.image.length > 200)
                       ? DecorationImage(
                           image: MemoryImage(base64Decode(product.image)),
                           fit: BoxFit.cover,
@@ -57,15 +58,27 @@ class PromoProductCard extends StatelessWidget {
                 left: 0,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(.5),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.transparent,
+                        primaryColor.withOpacity(.4),
+                        primaryColor.withOpacity(.8),
+                        primaryColor.withOpacity(.9),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(15.0),
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Flexible(
                           child: Text(
@@ -78,7 +91,7 @@ class PromoProductCard extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          height: 50.0,
+                          height: 40.0,
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.white,
@@ -106,7 +119,6 @@ class PromoProductCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  height: 50,
                 ),
               )
             ],

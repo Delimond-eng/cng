@@ -56,6 +56,12 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                 buildHeader(),
                 Expanded(
                   child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(40.0),
+                      ),
+                      color: Colors.white.withOpacity(.7),
+                    ),
                     child: StreamBuilder(
                       stream: streamMessages,
                       builder: (context, AsyncSnapshot<List<Chats>> snapshot) {
@@ -76,11 +82,7 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                                   itemCount: snapshot.data.length,
                                   physics: const BouncingScrollPhysics(),
                                   shrinkWrap: true,
-                                  padding: const EdgeInsets.only(
-                                    left: 15.0,
-                                    right: 15.0,
-                                    bottom: 15.0,
-                                  ),
+                                  padding: const EdgeInsets.all(15.0),
                                   itemBuilder: (context, index) {
                                     var data = snapshot.data[index];
                                     return ChatCard(

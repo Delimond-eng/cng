@@ -43,6 +43,7 @@ class ProductTradeLittleCard extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
+                  color: primaryColor.withOpacity(.2),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(.3),
@@ -149,6 +150,7 @@ class ProductTradeListCard extends StatelessWidget {
                 margin: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
+                  color: primaryColor.withOpacity(.2),
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 12.0,

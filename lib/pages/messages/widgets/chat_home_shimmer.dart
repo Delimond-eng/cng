@@ -7,6 +7,9 @@ class ChatListLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      padding: const EdgeInsets.all(15.0),
       child: Shimmer.fromColors(
         direction: ShimmerDirection.ltr,
         baseColor: Colors.grey[500],
@@ -26,9 +29,9 @@ class ChatListLoading extends StatelessWidget {
                       Container(
                         height: 70.0,
                         width: 70.0,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: Colors.white,
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
                       const SizedBox(

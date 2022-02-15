@@ -1,10 +1,13 @@
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:cng/constants/style.dart';
+import 'package:cng/models/chat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomChatBubble extends StatelessWidget {
   final bool isSender;
   final String text;
+  final Messages data;
   final bool tail;
   final Color color;
   final bool sent;
@@ -27,6 +30,7 @@ class CustomChatBubble extends StatelessWidget {
       fontSize: 16,
     ),
     this.time,
+    this.data,
   }) : super(key: key);
 
   ///chat bubble builder method
@@ -63,60 +67,121 @@ class CustomChatBubble extends StatelessWidget {
       alignment: isSender ? Alignment.topRight : Alignment.topLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: CustomPaint(
-          painter: SpecialChatBubbleOne(
-            color: color,
-            alignment: isSender ? Alignment.topRight : Alignment.topLeft,
-            tail: tail,
-          ),
-          child: Container(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * .7,
-            ),
-            margin: isSender
-                ? stateTick
-                    ? const EdgeInsets.fromLTRB(7, 7, 14, 7)
-                    : const EdgeInsets.fromLTRB(7, 7, 17, 7)
-                : const EdgeInsets.fromLTRB(17, 7, 7, 7),
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: stateTick
-                      ? const EdgeInsets.only(right: 55)
-                      : const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        child: Row(
+          children: [
+            if (isSender) ...[
+              Container(
+                height: 50.0,
+                width: 50.0,
+                decoration: BoxDecoration(
+                    color: Colors.green[700], shape: BoxShape.circle),
+                child: Center(
                   child: Text(
-                    text,
-                    style: textStyle,
-                    textAlign: TextAlign.left,
+                    "Moi",
+                    style: GoogleFonts.lato(
+                      color: Colors.white,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                stateIcon != null && stateTick
-                    ? Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Row(
-                          children: [
-                            Text(
-                              time,
-                              style: GoogleFonts.lato(
-                                color: Colors.grey[500],
-                                fontSize: 10.0,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            stateIcon
-                          ],
-                        ),
-                      )
-                    : const SizedBox(
-                        width: 1,
+              ),
+              const SizedBox(
+                width: 8.0,
+              ),
+            ],
+            CustomPaint(
+              painter: SpecialChatBubbleOne(
+                color: color,
+                alignment: isSender ? Alignment.topRight : Alignment.topLeft,
+                tail: tail,
+              ),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * .7,
+                ),
+                margin: isSender
+                    ? stateTick
+                        ? const EdgeInsets.fromLTRB(7, 7, 14, 7)
+                        : const EdgeInsets.fromLTRB(7, 7, 17, 7)
+                    : const EdgeInsets.fromLTRB(17, 7, 7, 7),
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: stateTick
+                          ? const EdgeInsets.only(right: 55)
+                          : const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 0),
+                      child: Text(
+                        text,
+                        style: textStyle,
+                        textAlign: TextAlign.left,
                       ),
-              ],
+                    ),
+                    stateIcon != null && stateTick
+                        ? Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Row(
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.access_time_filled_outlined,
+                                      size: 12.0,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                    Text(
+                                      time,
+                                      style: GoogleFonts.lato(
+                                        color: Colors.white,
+                                        fontSize: 10.0,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                stateIcon
+                              ],
+                            ),
+                          )
+                        : const SizedBox(
+                            width: 1,
+                          ),
+                  ],
+                ),
+              ),
             ),
-          ),
+            if (!isSender) ...[
+              const SizedBox(
+                width: 10.0,
+              ),
+              Container(
+                height: 50.0,
+                width: 50.0,
+                decoration: BoxDecoration(
+                  color: accentColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    data.nom.substring(0, 1).toUpperCase(),
+                    style: GoogleFonts.lato(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );

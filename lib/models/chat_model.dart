@@ -5,56 +5,54 @@ class ChatModel {
 
   ChatModel.fromJson(Map<String, dynamic> json) {
     if (json['chats'] != null) {
-      chats = new List<Chats>();
+      chats = <Chats>[];
       json['chats'].forEach((v) {
-        chats.add(new Chats.fromJson(v));
+        chats.add(Chats.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.chats != null) {
-      data['chats'] = this.chats.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = {};
+    if (chats != null) {
+      data['chats'] = chats.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Chats {
-  String produitId;
   String chatId;
   List<Users> users;
   List<Messages> messages;
 
-  Chats({this.produitId, this.chatId, this.users, this.messages});
+  Chats({this.chatId, this.users, this.messages});
 
   Chats.fromJson(Map<String, dynamic> json) {
-    produitId = json['produit_id'];
     chatId = json['chat_id'];
     if (json['users'] != null) {
-      users = new List<Users>();
+      users = <Users>[];
       json['users'].forEach((v) {
-        users.add(new Users.fromJson(v));
+        users.add(Users.fromJson(v));
       });
     }
     if (json['messages'] != null) {
-      messages = new List<Messages>();
+      messages = <Messages>[];
       json['messages'].forEach((v) {
-        messages.add(new Messages.fromJson(v));
+        messages.add(Messages.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['produit_id'] = this.produitId;
-    data['chat_id'] = this.chatId;
-    if (this.users != null) {
-      data['users'] = this.users.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = {};
+    ;
+    data['chat_id'] = chatId;
+    if (users != null) {
+      data['users'] = users.map((v) => v.toJson()).toList();
     }
-    if (this.messages != null) {
-      data['messages'] = this.messages.map((v) => v.toJson()).toList();
+    if (messages != null) {
+      data['messages'] = messages.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -72,7 +70,7 @@ class Users {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['nom'] = this.nom;
     data['user_id'] = this.userId;
     return data;
@@ -87,15 +85,18 @@ class Messages {
   String messageStatus;
   String dateEnregistrement;
   String media;
+  ChatProduit produit;
 
-  Messages(
-      {this.nom,
-      this.messageId,
-      this.message,
-      this.userId,
-      this.messageStatus,
-      this.dateEnregistrement,
-      this.media});
+  Messages({
+    this.nom,
+    this.messageId,
+    this.message,
+    this.userId,
+    this.messageStatus,
+    this.dateEnregistrement,
+    this.media,
+    this.produit,
+  });
 
   Messages.fromJson(Map<String, dynamic> json) {
     nom = json['nom'];
@@ -105,17 +106,56 @@ class Messages {
     messageStatus = json['message_status'];
     dateEnregistrement = json['date_enregistrement'];
     media = json['media'];
+    produit = (json["produit"] != null)
+        ? ChatProduit.fromJson(json["produit"])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['nom'] = this.nom;
-    data['message_id'] = this.messageId;
-    data['message'] = this.message;
-    data['user_id'] = this.userId;
-    data['message_status'] = this.messageStatus;
-    data['date_enregistrement'] = this.dateEnregistrement;
-    data['media'] = this.media;
+    final Map<String, dynamic> data = {};
+    data['nom'] = nom;
+    data['message_id'] = messageId;
+    data['message'] = message;
+    data['user_id'] = userId;
+    data['message_status'] = messageStatus;
+    data['date_enregistrement'] = dateEnregistrement;
+    data['media'] = media;
+    if (produit != null) {
+      data["produit"] = produit.toJson();
+    }
+    return data;
+  }
+}
+
+class ChatProduit {
+  String produitId;
+  String produitTitre;
+  String produitPrix;
+  String produitDevise;
+  String produitImage;
+  ChatProduit({
+    this.produitId,
+    this.produitTitre,
+    this.produitPrix,
+    this.produitDevise,
+    this.produitImage,
+  });
+
+  ChatProduit.fromJson(Map<String, dynamic> map) {
+    produitId = map["produit_id"];
+    produitTitre = map["titre"];
+    produitPrix = map["prix"];
+    produitDevise = map["devise"];
+    produitImage = map["image"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data["produit_id"] = produitId;
+    data["titre"] = produitTitre;
+    data["prix"] = produitPrix;
+    data["devise"] = produitDevise;
+    data["image"] = produitImage;
     return data;
   }
 }

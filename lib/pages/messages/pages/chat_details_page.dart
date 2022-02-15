@@ -6,6 +6,7 @@ import 'package:cng/components/custom_header.dart';
 import 'package:cng/constants/global.dart';
 import 'package:cng/models/chat.dart';
 import 'package:cng/models/chat_model.dart';
+import 'package:cng/pages/messages/widgets/chat_product_bubble.dart';
 import 'package:cng/pages/messages/widgets/custom_chat_bubble.dart';
 import 'package:cng/pages/messages/widgets/image_bubble.dart';
 import 'package:cng/services/api_manager.dart';
@@ -106,7 +107,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(.5),
+                    color: Colors.white.withOpacity(.8),
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(30.0),
                     ),
@@ -139,7 +140,18 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                                           .split("|")[1]
                                           .trim(),
                                     ),*/
-
+                                if (chatController.messages[i].produit !=
+                                    null) ...[
+                                  ChatProductBubble(
+                                    data: chatController.messages[i],
+                                    sent: true,
+                                    isSender: chatController
+                                                .messages[i].userId ==
+                                            storage.read("userid").toString()
+                                        ? true
+                                        : false,
+                                  ),
+                                ],
                                 if (chatController.messages[i].media ==
                                     null) ...[
                                   CustomChatBubble(

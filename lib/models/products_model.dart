@@ -4,14 +4,13 @@ class ProductsModel {
   ProductsModel({this.reponse});
 
   ProductsModel.fromJson(Map<String, dynamic> json) {
-    reponse =
-        json['reponse'] != null ? new Data.fromJson(json['reponse']) : null;
+    reponse = json['reponse'] != null ? Data.fromJson(json['reponse']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.reponse != null) {
-      data['reponse'] = this.reponse.toJson();
+    final Map<String, dynamic> data = {};
+    if (reponse != null) {
+      data['reponse'] = reponse.toJson();
     }
     return data;
   }
@@ -24,17 +23,17 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['produits'] != null) {
-      produits = new List<Product>();
+      produits = <Product>[];
       json['produits'].forEach((v) {
-        produits.add(new Product.fromJson(v));
+        produits.add(Product.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.produits != null) {
-      data['produits'] = this.produits.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = {};
+    if (produits != null) {
+      data['produits'] = produits.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -67,13 +66,13 @@ class Product {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['produit_id'] = this.produitId;
-    data['titre'] = this.titre;
-    data['description'] = this.description;
-    data['image'] = this.image;
-    data['prix'] = this.prix;
-    data['devise'] = this.devise;
+    final Map<String, dynamic> data = {};
+    data['produit_id'] = produitId;
+    data['titre'] = titre;
+    data['description'] = description;
+    data['image'] = image;
+    data['prix'] = prix;
+    data['devise'] = devise;
     return data;
   }
 }

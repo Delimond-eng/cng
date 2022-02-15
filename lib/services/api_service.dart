@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class ApiService {
-  static String baseUrl = 'http://cng.rtgroup-rdc.com';
+  static String baseUrl = 'http://back-system.wenze-rdc.com';
 
   ///
   ///@param url: add url to endpoint

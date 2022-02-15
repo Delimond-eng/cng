@@ -36,7 +36,7 @@ class CustomChatBubble extends StatelessWidget {
     Icon stateIcon;
     if (sent) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done,
         size: 18,
         color: Color(0xFF97AD8E),
@@ -44,7 +44,7 @@ class CustomChatBubble extends StatelessWidget {
     }
     if (delivered) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done_all,
         size: 18,
         color: Color(0xFF97AD8E),
@@ -52,7 +52,7 @@ class CustomChatBubble extends StatelessWidget {
     }
     if (seen) {
       stateTick = true;
-      stateIcon = Icon(
+      stateIcon = const Icon(
         Icons.done_all,
         size: 18,
         color: Color(0xFF92DEDA),
@@ -75,15 +75,15 @@ class CustomChatBubble extends StatelessWidget {
             ),
             margin: isSender
                 ? stateTick
-                    ? EdgeInsets.fromLTRB(7, 7, 14, 7)
-                    : EdgeInsets.fromLTRB(7, 7, 17, 7)
-                : EdgeInsets.fromLTRB(17, 7, 7, 7),
+                    ? const EdgeInsets.fromLTRB(7, 7, 14, 7)
+                    : const EdgeInsets.fromLTRB(7, 7, 17, 7)
+                : const EdgeInsets.fromLTRB(17, 7, 7, 7),
             child: Stack(
               children: <Widget>[
                 Padding(
                   padding: stateTick
-                      ? EdgeInsets.only(right: 55)
-                      : EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                      ? const EdgeInsets.only(right: 55)
+                      : const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                   child: Text(
                     text,
                     style: textStyle,
@@ -104,14 +104,14 @@ class CustomChatBubble extends StatelessWidget {
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4,
                             ),
                             stateIcon
                           ],
                         ),
                       )
-                    : SizedBox(
+                    : const SizedBox(
                         width: 1,
                       ),
               ],

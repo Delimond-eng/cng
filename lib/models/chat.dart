@@ -13,7 +13,7 @@ class Chat {
   });
 
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     data["user_id"] = userId;
     if (chatId != null) {
       data["chat_id"] = chatId;

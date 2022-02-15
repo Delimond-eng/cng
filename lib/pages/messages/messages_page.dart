@@ -2,11 +2,9 @@ import 'package:cng/components/custom_header.dart';
 import 'package:cng/components/user_session_component.dart';
 import 'package:cng/constants/global.dart';
 import 'package:cng/models/chat_model.dart';
-import 'package:cng/services/api_manager.dart';
 import 'package:cng/widgets/search_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../index.dart';
 import 'pages/chat_details_page.dart';
@@ -96,14 +94,16 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                                           PageTransition(
                                             child: ChatDetailsPage(
                                               messageSender: data.users
-                                                  .firstWhere((e) =>
-                                                      e.userId !=
-                                                      storage
-                                                          .read("userid")
-                                                          .toString())
+                                                  .firstWhere(
+                                                    (e) =>
+                                                        e.userId !=
+                                                        storage
+                                                            .read("userid")
+                                                            .toString(),
+                                                  )
                                                   .nom,
                                               chatId: data.chatId,
-                                              produitId: data.produitId,
+                                              produitId: "data.produitId",
                                             ),
                                             type: PageTransitionType
                                                 .leftToRightWithFade,

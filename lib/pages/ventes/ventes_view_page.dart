@@ -16,7 +16,7 @@ import '../../index.dart';
 import 'pages/add_page.dart';
 
 class VentesViewPage extends StatefulWidget {
-  VentesViewPage({Key key}) : super(key: key);
+  const VentesViewPage({Key key}) : super(key: key);
 
   @override
   _VentesViewPageState createState() => _VentesViewPageState();
@@ -107,7 +107,7 @@ class _VentesViewPageState extends State<VentesViewPage> {
                                             padding: const EdgeInsets.all(10.0),
                                             margin: const EdgeInsets.symmetric(
                                                 horizontal: 2),
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                               color: Colors.grey,
                                               shape: BoxShape.circle,
                                             ),
@@ -225,7 +225,7 @@ class _VentesViewPageState extends State<VentesViewPage> {
                                                 margin:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 2),
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   color: Colors.black12,
                                                   shape: BoxShape.circle,
                                                 ),

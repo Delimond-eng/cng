@@ -18,7 +18,7 @@ import 'package:cng/widgets/costum_dropdown.dart';
 import '../../../index.dart';
 
 class AddVentePage extends StatefulWidget {
-  AddVentePage({Key key, this.subCategory}) : super(key: key);
+  const AddVentePage({Key key, this.subCategory}) : super(key: key);
 
   final List<SousCategories> subCategory;
 
@@ -31,6 +31,7 @@ class _AddVentePageState extends State<AddVentePage>
   TabController controller;
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
+  final _formKeyDetail = GlobalKey<FormState>();
 
   List<String> images = [];
   List<FormulaireVenteDetails> subCatDetails = [];
@@ -174,7 +175,7 @@ class _AddVentePageState extends State<AddVentePage>
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            "${e.sousCategorie}",
+                            "${e.sousCategorie} ",
                             style:
                                 GoogleFonts.lato(fontWeight: FontWeight.w400),
                           ),
@@ -610,94 +611,103 @@ class _AddVentePageState extends State<AddVentePage>
               ),
             )
           ] else ...[
-            Column(
-              children: [
-                for (int i = 0; i < subCatDetails.length; i++)
-                  DetailField(
-                    subCatDetail: subCatDetails[i],
-                    productDetail: productDetails[i],
+            Form(
+              key: _formKeyDetail,
+              child: Column(
+                children: [
+                  for (int i = 0; i < subCatDetails.length; i++) ...[
+                    DetailField(
+                      subCatDetail: subCatDetails[i],
+                      productDetail: productDetails[i],
+                    ),
+                  ],
+                  Container(
+                    height: 50.0,
+                    width: double.infinity,
+                    // ignore: deprecated_member_use
+                    child: RaisedButton.icon(
+                      color: Colors.green[700],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      label: Text(
+                        "Ajouter",
+                        style: GoogleFonts.lato(
+                          color: Colors.white,
+                          letterSpacing: 1.0,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 15.0,
+                      ),
+                      elevation: 5.0,
+                      onPressed: subCatDetails.isEmpty
+                          ? null
+                          : () async {
+                              if (produitId.isEmpty) {
+                                Get.back();
+                                XDialog.showConfirmation(
+                                    content:
+                                        "Vous devez enregistrer votre produit avant l'ajout des détails !",
+                                    title: "Aucun produit trouvé",
+                                    icon: Icons.info,
+                                    context: context,
+                                    onCancel: () {
+                                      controller.index = 0;
+                                    });
+                                return;
+                              }
+                              if (subCatDetails.isEmpty) {
+                                Get.back();
+                                XDialog.showConfirmation(
+                                    content:
+                                        "Vous devez sélectionner la catégorie du produit ou service que vous vouler poster !",
+                                    title: "Aucune catégorie sélectionnée ",
+                                    icon: Icons.info,
+                                    context: context,
+                                    onCancel: () {
+                                      controller.index = 0;
+                                      Get.back();
+                                    });
+                                return;
+                              }
+                              if (_formKeyDetail.currentState.validate()) {
+                                Xloading.showLoading(context);
+                                for (int i = 0;
+                                    i < productDetails.length;
+                                    i++) {
+                                  await managerController.addNewProduct(
+                                    key: "detail",
+                                    data: <String, dynamic>{
+                                      "user_id": userId,
+                                      "produit_id": produitId,
+                                      "produit_sous_categorie_detail_id":
+                                          productDetails[i].detailId,
+                                      "produit_detail":
+                                          productDetails[i].controller.text,
+                                    },
+                                  );
+                                }
+                                Xloading.dismiss();
+                                XDialog.showSuccessAnimation(context);
+
+                                await managerController
+                                    .viewOwnProductsAndServices();
+                                setState(() {
+                                  controller.index = 0;
+                                });
+                              }
+                            },
+                    ),
                   )
-              ],
+                ],
+              ),
             ),
           ],
-          Container(
-            height: 50.0,
-            width: double.infinity,
-            // ignore: deprecated_member_use
-            child: RaisedButton.icon(
-              color: Colors.green[700],
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              label: Text(
-                "Ajouter",
-                style: GoogleFonts.lato(
-                  color: Colors.white,
-                  letterSpacing: 1.0,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 15.0,
-              ),
-              elevation: 5.0,
-              onPressed: subCatDetails.isEmpty
-                  ? null
-                  : () async {
-                      if (produitId.isEmpty) {
-                        Get.back();
-                        XDialog.showConfirmation(
-                            content:
-                                "Vous devez enregistrer votre produit avant l'ajout des détails !",
-                            title: "Aucun produit trouvé",
-                            icon: Icons.info,
-                            context: context,
-                            onCancel: () {
-                              controller.index = 0;
-                            });
-                        return;
-                      }
-                      if (subCatDetails.isEmpty) {
-                        Get.back();
-                        XDialog.showConfirmation(
-                            content:
-                                "Vous devez sélectionner la catégorie du produit ou service que vous vouler poster !",
-                            title: "Aucune catégorie sélectionnée ",
-                            icon: Icons.info,
-                            context: context,
-                            onCancel: () {
-                              controller.index = 0;
-                              Get.back();
-                            });
-                        return;
-                      }
-                      Xloading.showLoading(context);
-
-                      for (int i = 0; i < productDetails.length; i++) {
-                        await managerController.addNewProduct(
-                          key: "detail",
-                          data: <String, dynamic>{
-                            "user_id": userId,
-                            "produit_id": produitId,
-                            "produit_sous_categorie_detail_id":
-                                productDetails[i].detailId,
-                            "produit_detail": productDetails[i].controller.text,
-                          },
-                        );
-                      }
-                      Xloading.dismiss();
-                      XDialog.showSuccessAnimation(context);
-
-                      await managerController.viewOwnProductsAndServices();
-                      setState(() {
-                        controller.index = 0;
-                      });
-                    },
-            ),
-          ),
         ],
       ),
     );
@@ -798,7 +808,7 @@ class _AddVentePageState extends State<AddVentePage>
                               ),
                             ),
                             if (_isSelectedError2)
-                              SizedBox(
+                              const SizedBox(
                                 height: 5.0,
                               ),
                             if (_isSelectedError2)
@@ -1046,61 +1056,12 @@ class DetailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(5.0),
-      margin: const EdgeInsets.only(bottom: 8.0),
-      height: 60.0,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: primaryColor,
-          width: .5,
-        ),
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Row(
-        children: [
-          Flexible(
-            flex: 4,
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(subCatDetail.sousCategorieDetail),
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 8,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 4, vertical: 10.0),
-              width: double.infinity,
-              height: 50.0,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: primaryColor,
-                    width: .5,
-                  ),
-                  borderRadius: BorderRadius.circular(5.0)),
-              child: TextField(
-                controller: productDetail.controller,
-                style: GoogleFonts.lato(fontSize: 15.0, color: primaryColor),
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: "saisir valeur",
-                  hintStyle:
-                      GoogleFonts.lato(color: Colors.black54, fontSize: 14.0),
-                  errorStyle: GoogleFonts.lato(color: Colors.red, fontSize: 0),
-                  border: InputBorder.none,
-                  icon: const Icon(CupertinoIcons.pencil),
-                  counterText: '',
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
+    return CostumFormTextField(
+      controller: productDetail.controller,
+      expandedLabel: subCatDetail.sousCategorieDetail,
+      errorText: "${subCatDetail.sousCategorieDetail} requis(e) !",
+      hintText: "Saisir une valeur",
+      icon: CupertinoIcons.arrow_right_to_line_alt,
     );
   }
 }

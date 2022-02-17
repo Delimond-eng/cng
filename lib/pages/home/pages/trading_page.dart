@@ -249,6 +249,7 @@ class _TradingPageState extends State<TradingPage> {
       print(res);
       if (res["reponse"]["status"] == "success") {
         String chatId = res['reponse']['chat_id'].toString();
+        chatController.messages.clear();
         Navigator.push(
           context,
           PageTransition(
@@ -275,6 +276,7 @@ class _TradingPageState extends State<TradingPage> {
       );
       return;
     }
+    chatController.messages.clear();
     Navigator.push(
       context,
       PageTransition(

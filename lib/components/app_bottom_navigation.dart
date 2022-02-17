@@ -31,7 +31,7 @@ class _AppBottomNavigationState extends State<AppBottomNavigation> {
     },
     {
       'icon': 'assets/icons/user-profile-svgrepo-com.svg',
-      'label': 'Moi',
+      'label': 'Mon compte',
     },
   ];
 

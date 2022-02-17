@@ -111,8 +111,6 @@ class _HomePageState extends State<HomePage> {
                                       Colors.blue,
                                       primaryColor,
                                     ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
                                   ),
                                   borderRadius: BorderRadius.circular(25.0),
                                   boxShadow: [
@@ -166,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                           builder: (context, snapshot) {
                             if (snapshot.data == null) {
                               return Shimmer.fromColors(
-                                baseColor: Colors.grey[300],
+                                baseColor: primaryColor.withOpacity(.2),
                                 highlightColor: Colors.white,
                                 enabled: true,
                                 child: GridView.builder(
@@ -185,9 +183,9 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     return Container(
                                       decoration: BoxDecoration(
-                                        color: Colors.grey[200],
+                                        color: primaryColor.withOpacity(.2),
                                         borderRadius:
-                                            BorderRadius.circular(20.0),
+                                            BorderRadius.circular(10.0),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.black.withOpacity(.1),
@@ -211,8 +209,8 @@ class _HomePageState extends State<HomePage> {
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                         childAspectRatio: 0.8,
-                                        crossAxisSpacing: 10,
-                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 10.0,
+                                        mainAxisSpacing: 10.0,
                                         crossAxisCount: 2,
                                       ),
                                       itemCount:
@@ -541,14 +539,14 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for (int i = 0; i < 4; i++) ...[
+                  for (int i = 0; i < 5; i++) ...[
                     Container(
                       width: 80.0,
                       height: 80.0,
                       margin: const EdgeInsets.only(left: 5.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                   ]
@@ -605,11 +603,9 @@ class ViewMoreBtn extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.blue,
             primaryColor,
+            Colors.blue,
           ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
         ),
         borderRadius: BorderRadius.circular(25.0),
         boxShadow: [

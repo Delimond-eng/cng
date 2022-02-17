@@ -188,6 +188,7 @@ class XDialog {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -239,7 +240,9 @@ class XDialog {
               letterSpacing: 1.0,
               color: Colors.red[400]),
         ),
-        onPressed: onCancel ?? () => Get.back(),
+        onPressed: () {
+          Get.back();
+        },
       ),
     );
 

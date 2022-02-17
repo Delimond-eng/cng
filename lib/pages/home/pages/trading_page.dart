@@ -24,7 +24,7 @@ import 'package:shimmer/shimmer.dart';
 
 class TradingPage extends StatefulWidget {
   final Product product;
-  TradingPage({Key key, this.product}) : super(key: key);
+  const TradingPage({Key key, this.product}) : super(key: key);
 
   @override
   _TradingPageState createState() => _TradingPageState();
@@ -37,12 +37,41 @@ class _TradingPageState extends State<TradingPage> {
   final _formOffreKey = GlobalKey<FormState>();
   final _textOffreMontant = TextEditingController();
   bool isGridView = true;
-  final textMessage = TextEditingController();
+  String userChatId = "";
 
   @override
   void dispose() {
     super.dispose();
     pageController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initData();
+  }
+
+  initData() async {
+    var userId = storage.read("userid");
+    if (userId != null) {
+      var data = await ApiManager.viewChats();
+      var chatList = data.chats;
+
+      for (var chat in chatList) {
+        chat.messages.forEach((e) {
+          if (e.produit != null) {
+            if (e.produit.produitId == widget.product.produitId) {
+              setState(() {
+                userChatId = chat.chatId;
+              });
+              return;
+            } else {
+              print("not found");
+            }
+          }
+        });
+      }
+    }
   }
 
   Future<void> sendOffer(context) async {
@@ -204,61 +233,57 @@ class _TradingPageState extends State<TradingPage> {
       );
       return;
     }
-    if (textMessage.text.isEmpty) {
-      Get.snackbar(
-        "Avertissement",
-        "vous devez taper votre message !",
-        snackPosition: SnackPosition.BOTTOM,
-        colorText: Colors.white,
-        backgroundColor: Colors.black87,
-        maxWidth: MediaQuery.of(context).size.width - 2,
-        borderRadius: 10,
-        duration: const Duration(seconds: 5),
-      );
-      return;
-    }
+
     Chat chat = Chat(
       produitId: widget.product.produitId,
-      message: textMessage.text,
+      message: "Bonjour ! Je suis intéressé par ce produit/service !",
       userId: storage.read("userid"),
     );
     //hide keyboard
     FocusScope.of(context).unfocus();
     Xloading.showLoading(context);
-    await ApiManager.chatService(chat: chat).then((res) {
-      Xloading.dismiss();
+    var res = await ApiManager.chatService(chat: chat);
+    Xloading.dismiss();
+    if (res != null) {
       print(res);
-      setState(() {
-        textMessage.text = "";
-      });
-
       if (res["reponse"]["status"] == "success") {
         String chatId = res['reponse']['chat_id'].toString();
-        chatController.messages.clear();
         Navigator.push(
           context,
           PageTransition(
             child: ChatDetailsPage(
               messageSender: "Nouvelle discussion",
-              produitId: widget.product.produitId,
               chatId: chatId,
             ),
             type: PageTransitionType.rightToLeftWithFade,
           ),
         );
-      } else {
-        Get.snackbar(
-          "Info",
-          "Cette discussion est en cours... !",
-          snackPosition: SnackPosition.BOTTOM,
-          colorText: Colors.white,
-          backgroundColor: Colors.blue,
-          maxWidth: MediaQuery.of(context).size.width - 2,
-          borderRadius: 10,
-          duration: const Duration(seconds: 5),
-        );
       }
-    });
+    }
+  }
+
+  Future<void> viewDiscussion(context) async {
+    var userId = storage.read("userid");
+    if (userId == null) {
+      Navigator.push(
+        context,
+        PageTransition(
+          child: AuthLogin(),
+          type: PageTransitionType.bottomToTop,
+        ),
+      );
+      return;
+    }
+    Navigator.push(
+      context,
+      PageTransition(
+        child: ChatDetailsPage(
+          messageSender: "Discussion en cours",
+          chatId: userChatId,
+        ),
+        type: PageTransitionType.rightToLeftWithFade,
+      ),
+    );
   }
 
   @override
@@ -268,12 +293,12 @@ class _TradingPageState extends State<TradingPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: darkBlueColor,
         child: const Icon(
-          CupertinoIcons.arrow_up_to_line_alt,
+          CupertinoIcons.arrow_up,
           size: 18.0,
           color: Colors.white,
         ),
         elevation: 10.0,
-        onPressed: () {},
+        onPressed: () async {},
       ),
       body: ValueListenableBuilder<int>(
         valueListenable: sliderNotifier,
@@ -493,42 +518,6 @@ class _TradingPageState extends State<TradingPage> {
                                         const SizedBox(
                                           height: 15.0,
                                         ),
-                                        TextField(
-                                          controller: textMessage,
-                                          decoration: InputDecoration(
-                                            labelText: "Message",
-                                            hintText: 'Entrez votre message...',
-                                            prefixIcon: Icon(
-                                              CupertinoIcons.chat_bubble_text,
-                                              color: Colors.yellow[900],
-                                              size: 16.0,
-                                            ),
-                                            fillColor: Colors.white,
-                                            border: const OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black54,
-                                                  width: 1.0),
-                                              borderRadius: BorderRadius.zero,
-                                            ),
-                                            enabledBorder:
-                                                const OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black54,
-                                                  width: 1.0),
-                                              borderRadius: BorderRadius.zero,
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: primaryColor,
-                                                width: 1.0,
-                                              ),
-                                              borderRadius: BorderRadius.zero,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 15.0,
-                                        ),
                                         Container(
                                           height: 60.0,
                                           width:
@@ -589,33 +578,37 @@ class _TradingPageState extends State<TradingPage> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        Flexible(
-                                          child: Container(
-                                            height: 40.0,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            // ignore: deprecated_member_use
-                                            child: RaisedButton.icon(
-                                              color: primaryColor,
-                                              icon: const Icon(
-                                                CupertinoIcons.chat_bubble_text,
-                                                color: Colors.white,
-                                              ),
-                                              label: Text(
-                                                "Discussion",
-                                                style: GoogleFonts.lato(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                              onPressed: () {},
-                                            ),
+                                        if (userChatId.isNotEmpty) ...[
+                                          const SizedBox(
+                                            width: 10.0,
                                           ),
-                                        )
+                                          Flexible(
+                                            child: Container(
+                                              height: 40.0,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              // ignore: deprecated_member_use
+                                              child: RaisedButton.icon(
+                                                color: primaryColor,
+                                                icon: const Icon(
+                                                  CupertinoIcons
+                                                      .chat_bubble_text,
+                                                  color: Colors.white,
+                                                ),
+                                                label: Text(
+                                                  "Voir discussion",
+                                                  style: GoogleFonts.lato(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                                onPressed: () =>
+                                                    viewDiscussion(context),
+                                              ),
+                                            ),
+                                          )
+                                        ]
                                       ],
                                     ),
                                   ),
@@ -688,7 +681,8 @@ class _TradingPageState extends State<TradingPage> {
                                     builder: (context, snapshot) {
                                       if (snapshot.data == null) {
                                         return Shimmer.fromColors(
-                                          baseColor: Colors.grey[300],
+                                          baseColor:
+                                              primaryColor.withOpacity(.2),
                                           highlightColor: Colors.white,
                                           enabled: true,
                                           child: GridView.builder(
@@ -700,7 +694,7 @@ class _TradingPageState extends State<TradingPage> {
                                             shrinkWrap: true,
                                             gridDelegate:
                                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                                              childAspectRatio: 0.95,
+                                              childAspectRatio: .95,
                                               crossAxisSpacing: 10,
                                               mainAxisSpacing: 10,
                                               crossAxisCount: 2,
@@ -709,10 +703,11 @@ class _TradingPageState extends State<TradingPage> {
                                             itemBuilder: (context, index) {
                                               return Container(
                                                 decoration: BoxDecoration(
-                                                  color: Colors.grey[200],
+                                                  color: primaryColor
+                                                      .withOpacity(.2),
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          20.0),
+                                                          10.0),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: Colors.black
@@ -830,7 +825,7 @@ class _TradingPageState extends State<TradingPage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.9),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
@@ -842,7 +837,7 @@ class _TradingPageState extends State<TradingPage> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(.9),
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

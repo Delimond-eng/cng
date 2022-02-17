@@ -19,7 +19,11 @@ class ProductTradeLittleCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.9),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+          color: primaryColor.withOpacity(.2),
+          width: .5,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
@@ -30,10 +34,10 @@ class ProductTradeLittleCard extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.zero,
+        borderRadius: BorderRadius.circular(10.0),
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.zero,
+          borderRadius: BorderRadius.circular(10.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +46,7 @@ class ProductTradeLittleCard extends StatelessWidget {
                 height: 110.0,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(10.0),
                   color: primaryColor.withOpacity(.2),
                   boxShadow: [
                     BoxShadow(
@@ -84,7 +88,7 @@ class ProductTradeLittleCard extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(20.0)),
+                          borderRadius: BorderRadius.circular(10.0)),
                       child: Text(
                         '${product.prix} ${product.devise}',
                         style: GoogleFonts.lato(
@@ -125,7 +129,8 @@ class ProductTradeListCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(.9),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: primaryColor.withOpacity(.2)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
@@ -136,10 +141,10 @@ class ProductTradeListCard extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.zero,
+        borderRadius: BorderRadius.circular(10.0),
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.zero,
+          borderRadius: BorderRadius.circular(10.0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +154,7 @@ class ProductTradeListCard extends StatelessWidget {
                 width: 100,
                 margin: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(10.0),
                   color: primaryColor.withOpacity(.2),
                   boxShadow: [
                     BoxShadow(

@@ -20,15 +20,11 @@ class CategoryCard extends StatelessWidget {
       margin: const EdgeInsets.only(right: 8.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors
-                .primaries[Random().nextInt(Colors.primaries.length)].shade900,
-            primaryColor,
-          ],
+          colors: [accentColor, primaryColor],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(.3),
@@ -38,10 +34,10 @@ class CategoryCard extends StatelessWidget {
         ],
       ),
       child: Material(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(10.0),
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(10.0),
           onTap: onPressed,
           child: Padding(
             padding: const EdgeInsets.all(8.0),

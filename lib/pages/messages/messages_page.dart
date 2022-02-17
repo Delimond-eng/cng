@@ -4,29 +4,22 @@ import 'package:cng/constants/global.dart';
 import 'package:cng/models/chat_model.dart';
 import 'package:cng/widgets/search_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../index.dart';
 import 'pages/chat_details_page.dart';
 import 'widgets/chat_card.dart';
-import 'widgets/chat_home_shimmer.dart';
 
 class MessagesViewPage extends StatefulWidget {
-  MessagesViewPage({Key key}) : super(key: key);
+  const MessagesViewPage({Key key}) : super(key: key);
 
   @override
   _MessagesViewPageState createState() => _MessagesViewPageState();
 }
 
 class _MessagesViewPageState extends State<MessagesViewPage> {
-  Stream<List<Chats>> get streamMessages async* {
-    while (true) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      var data = await chatController.viewChats();
-      yield data;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,14 +34,7 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
         ),
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.white.withOpacity(.5),
-                Colors.white.withOpacity(.4),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+            color: Colors.white.withOpacity(.8),
           ),
           child: SafeArea(
             child: Column(
@@ -58,71 +44,63 @@ class _MessagesViewPageState extends State<MessagesViewPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(40.0),
+                        top: Radius.circular(30.0),
                       ),
-                      color: Colors.white.withOpacity(.7),
+                      color: Colors.white.withOpacity(.9),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(.3),
+                          offset: Offset.zero,
+                          blurRadius: 10.0,
+                        )
+                      ],
                     ),
-                    child: StreamBuilder(
-                      stream: streamMessages,
-                      builder: (context, AsyncSnapshot<List<Chats>> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const ChatListLoading();
-                        } else {
-                          if (snapshot.hasData) {
-                            if (snapshot.data.isEmpty) {
-                              return const Center(
-                                child: Text("Aucune discussion en cours !"),
-                              );
-                            } else {
-                              return Scrollbar(
-                                radius: const Radius.circular(5.0),
-                                thickness: 4.0,
-                                child: ListView.builder(
-                                  itemCount: snapshot.data.length,
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(15.0),
-                                  itemBuilder: (context, index) {
-                                    var data = snapshot.data[index];
-                                    return ChatCard(
-                                      data: data,
-                                      onPressed: () async {
-                                        chatController.messages.clear();
-                                        chatController.messages.addAll(
-                                            snapshot.data[index].messages);
-                                        await Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            child: ChatDetailsPage(
-                                              messageSender: data.users
-                                                  .firstWhere(
-                                                    (e) =>
-                                                        e.userId !=
-                                                        storage
-                                                            .read("userid")
-                                                            .toString(),
-                                                  )
-                                                  .nom,
-                                              chatId: data.chatId,
-                                              produitId: "data.produitId",
-                                            ),
-                                            type: PageTransitionType
-                                                .leftToRightWithFade,
+                    child: Obx(() {
+                      return chatController.chats.isEmpty
+                          ? const Center(
+                              child: Text("Aucune discussion en cours !"),
+                            )
+                          : Scrollbar(
+                              radius: const Radius.circular(5.0),
+                              thickness: 4.0,
+                              child: ListView.builder(
+                                itemCount: chatController.chats.length,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.all(15.0),
+                                itemBuilder: (context, index) {
+                                  var data = chatController.chats[index];
+                                  return ChatCard(
+                                    data: data,
+                                    onPressed: () async {
+                                      chatController.messages.clear();
+                                      chatController.messages
+                                          .addAll(data.messages);
+                                      await Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          child: ChatDetailsPage(
+                                            messageSender: data.users
+                                                .firstWhere(
+                                                  (e) =>
+                                                      e.userId !=
+                                                      storage
+                                                          .read("userid")
+                                                          .toString(),
+                                                )
+                                                .nom,
+                                            chatId: data.chatId,
                                           ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              );
-                            }
-                          } else {
-                            return const Text("Aucune discussion en cours !");
-                          }
-                        }
-                      },
-                    ),
+                                          type: PageTransitionType
+                                              .leftToRightWithFade,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            );
+                    }),
                   ),
                 )
               ],

@@ -10,7 +10,7 @@ import 'pages/offer_view_page.dart';
 import 'pages/user_product_view_page.dart';
 
 class ProfilsViewPage extends StatefulWidget {
-  ProfilsViewPage({Key key}) : super(key: key);
+  const ProfilsViewPage({Key key}) : super(key: key);
 
   @override
   _ProfilsViewPageState createState() => _ProfilsViewPageState();
@@ -53,19 +53,20 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
                     label: "Notifications",
                     onPressed: () {},
                   ),
+
+                  //${managerController.userProducts.length.toString().padLeft(2, "0")}
                   ProfilTile(
                     badged: false,
                     icon: "assets/icons/shopping-bag-svgrepo-com.svg",
-                    label:
-                        "Mes produits & services (${managerController.userProducts.length.toString().padLeft(2, "0")})",
+                    label: "Mes produits & services (0)",
                     onPressed: () {
-                      Navigator.push(
+                      /*Navigator.push(
                         context,
                         PageTransition(
                           child: UserProductViewPage(),
                           type: PageTransitionType.rightToLeftWithFade,
                         ),
-                      );
+                      );*/
                     },
                   ),
                   ProfilTile(
@@ -86,13 +87,13 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
                     icon: "assets/icons/marketing-svgrepo-com.svg",
                     label: "Mes offres envoyées (0)",
                     onPressed: () {
-                      Navigator.push(
+                      /*Navigator.push(
                         context,
                         PageTransition(
                           child: const OfferViewPage(),
                           type: PageTransitionType.rightToLeftWithFade,
                         ),
-                      );
+                      );*/
                     },
                   ),
                   ProfilTile(
@@ -144,7 +145,7 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
                 ),
                 const SizedBox(width: 5.0),
                 Text(
-                  "Moi",
+                  "Mon compte",
                   style: GoogleFonts.lato(
                     color: Colors.black,
                     fontWeight: FontWeight.w700,

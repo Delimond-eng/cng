@@ -9,13 +9,13 @@ class ChatListLoading extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.all(15.0),
       child: Shimmer.fromColors(
         direction: ShimmerDirection.ltr,
         baseColor: Colors.grey[500],
         highlightColor: Colors.grey[100],
         enabled: true,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,48 +29,50 @@ class ChatListLoading extends StatelessWidget {
                       Container(
                         height: 70.0,
                         width: 70.0,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(25.0),
+                          shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(
                         width: 20.0,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 20,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 20,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          Container(
-                            height: 8,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                            const SizedBox(
+                              height: 5.0,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          Container(
-                            height: 5,
-                            width: 100.0,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                            Container(
+                              height: 8,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Container(
+                              height: 5,
+                              width: 100.0,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),

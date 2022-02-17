@@ -23,7 +23,8 @@ class ChatDetailsPage extends StatefulWidget {
   final String messageSender;
   final String chatId;
   final String produitId;
-  ChatDetailsPage({Key key, this.messageSender, this.chatId, this.produitId})
+  const ChatDetailsPage(
+      {Key key, this.messageSender, this.chatId, this.produitId})
       : super(key: key);
 
   @override
@@ -62,10 +63,17 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
       });
     } catch (err) {
       print("error from stream message listener $err");
+    } finally {
+      setState(() {
+        isLoading = !isLoading;
+      });
     }
   }
 
   Stream<ChatModel> get streamChat async* {
+    setState(() {
+      isLoading = !isLoading;
+    });
     while (true) {
       await Future.delayed(const Duration(milliseconds: 500));
       var data = await ApiManager.viewChats();
@@ -94,7 +102,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
             Expanded(
               child: Container(
                 height: MediaQuery.of(context).size.height,
-                margin: const EdgeInsets.only(top: 10.0),
+                margin: const EdgeInsets.only(top: 5.0),
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -102,98 +110,83 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30.0),
+                    top: Radius.circular(25.0),
                   ),
                 ),
                 child: Container(
+                  padding: const EdgeInsets.only(top: 2.0),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(.8),
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(30.0),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      reverse:
-                          chatController.messages.length < 6 ? false : true,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                      ),
-                      child: Obx(() {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            for (int i = 0;
-                                i < chatController.messages.length;
-                                i++) ...[
-                              /*CustomDateChip(
-                                    date: chatController
-                                        .messages[i].dateEnregistrement
-                                        .trim()
-                                        .split("|")[1]
-                                        .trim(),
-                                  ),*/
-                              if (chatController.messages[i].produit !=
-                                  null) ...[
-                                ChatProductBubble(
-                                  data: chatController.messages[i],
-                                  sent: true,
-                                  isSender: chatController.messages[i].userId ==
-                                          storage.read("userid").toString()
-                                      ? true
-                                      : false,
-                                ),
-                              ],
-                              if (chatController.messages[i].media == null) ...[
-                                CustomChatBubble(
-                                  data: chatController.messages[i],
-                                  time: msgDate(chatController
-                                      .messages[i].dateEnregistrement
-                                      .trim()),
-                                  text: chatController.messages[i].message,
-                                  isSender: chatController.messages[i].userId !=
-                                          storage.read("userid").toString()
-                                      ? false
-                                      : true,
-                                  color: chatController.messages[i].userId ==
-                                          storage.read("userid").toString()
-                                      ? darkBlueColor
-                                      : Colors.grey,
-                                  tail: true,
-                                  textStyle: GoogleFonts.lato(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                  ),
-                                  delivered: true,
-                                ),
-                              ] else ...[
-                                ImageBubble(
-                                  data: chatController.messages[i],
-                                  sent: true,
-                                  isSender: chatController.messages[i].userId ==
-                                          storage.read("userid").toString()
-                                      ? true
-                                      : false,
-                                ),
-                              ]
-                            ],
-                            if (isLoading) ...[
-                              const SizedBox(
-                                height: 10.0,
-                              ),
-                              Center(
-                                child: SpinKitThreeBounce(
-                                  color: primaryColor,
-                                  size: 25.0,
-                                ),
-                              )
-                            ],
-                          ],
-                        );
-                      }),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    reverse: chatController.messages.length < 6 ? false : true,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 15.0,
                     ),
+                    child: Obx(() {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          for (var chat in chatController.messages) ...[
+                            /*CustomDateChip(
+                                  date: chatController
+                                      .messages[i].dateEnregistrement
+                                      .trim()
+                                      .split("|")[1]
+                                      .trim(),
+                                ),*/
+                            if (chat.produit != null || chat.media != null) ...[
+                              ChatSpecialMediaBubble(
+                                data: chat,
+                                sent: true,
+                                isSender: chat.userId ==
+                                        storage.read("userid").toString()
+                                    ? true
+                                    : false,
+                              ),
+                            ],
+                            if (chat.media == null && chat.produit == null) ...[
+                              CustomChatBubble(
+                                data: chat,
+                                time: msgDate(
+                                  chat.dateEnregistrement.trim(),
+                                ),
+                                text: chat.message,
+                                isSender: chat.userId !=
+                                        storage.read("userid").toString()
+                                    ? false
+                                    : true,
+                                color: chat.userId ==
+                                        storage.read("userid").toString()
+                                    ? Colors.green[300]
+                                    : Colors.grey,
+                                tail: true,
+                                textStyle: GoogleFonts.lato(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                                delivered: true,
+                              ),
+                            ]
+                          ],
+                          if (isLoading) ...[
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Center(
+                              child: SpinKitThreeBounce(
+                                color: primaryColor,
+                                size: 25.0,
+                              ),
+                            )
+                          ],
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ),

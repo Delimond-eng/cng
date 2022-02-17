@@ -34,7 +34,7 @@ class CostumFormTextField extends StatelessWidget {
         ),
         hintStyle: GoogleFonts.lato(
           color: Colors.grey[500],
-          fontStyle: FontStyle.italic,
+          fontSize: 14.0,
         ),
         prefixIcon: Icon(
           icon,

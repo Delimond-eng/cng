@@ -620,6 +620,9 @@ class _AddVentePageState extends State<AddVentePage>
                       subCatDetail: subCatDetails[i],
                       productDetail: productDetails[i],
                     ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
                   ],
                   Container(
                     height: 50.0,
@@ -671,7 +674,6 @@ class _AddVentePageState extends State<AddVentePage>
                                     context: context,
                                     onCancel: () {
                                       controller.index = 0;
-                                      Get.back();
                                     });
                                 return;
                               }
@@ -1061,7 +1063,7 @@ class DetailField extends StatelessWidget {
       expandedLabel: subCatDetail.sousCategorieDetail,
       errorText: "${subCatDetail.sousCategorieDetail} requis(e) !",
       hintText: "Saisir une valeur",
-      icon: CupertinoIcons.arrow_right_to_line_alt,
+      icon: CupertinoIcons.pencil,
     );
   }
 }

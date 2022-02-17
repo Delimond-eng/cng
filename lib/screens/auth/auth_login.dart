@@ -7,7 +7,7 @@ import '../../index.dart';
 import 'auth_register.dart';
 
 class AuthLogin extends StatefulWidget {
-  AuthLogin({Key key}) : super(key: key);
+  const AuthLogin({Key key}) : super(key: key);
 
   @override
   _AuthLoginState createState() => _AuthLoginState();
@@ -48,20 +48,39 @@ class _AuthLoginState extends State<AuthLogin> {
           child: SafeArea(
             child: SingleChildScrollView(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 2.60),
+                  top: MediaQuery.of(context).size.height / 4.30),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                    child: Text(
-                      "Connectez-vous à votre compte !",
-                      style: GoogleFonts.lato(
-                        color: Colors.grey[200],
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 1.0,
+                  Center(
+                    child: Container(
+                      height: 100.0,
+                      width: 100.0,
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          image: AssetImage("assets/icons/app_icon.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        color: Colors.yellow[800],
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: Text(
+                        "Connectez-vous à votre compte !",
+                        style: GoogleFonts.lato(
+                          color: Colors.grey[200],
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w300,
+                          letterSpacing: 1.0,
+                        ),
                       ),
                     ),
                   ),
@@ -170,7 +189,7 @@ class _AuthLoginState extends State<AuthLogin> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30.0),
                                   ),
-                                  color: Colors.yellow[900],
+                                  color: accentColor,
                                   child: const Icon(
                                     Icons.arrow_right_alt,
                                     color: Colors.white,
@@ -205,7 +224,7 @@ class _AuthLoginState extends State<AuthLogin> {
                                       child: Text(
                                         "Créer un compte.",
                                         style: GoogleFonts.lato(
-                                          color: Colors.yellow[900],
+                                          color: secondaryColor,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),

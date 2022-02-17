@@ -20,7 +20,7 @@ import 'pages/catalog_page.dart';
 import 'pages/trading_page.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -566,12 +566,14 @@ class _HomePageState extends State<HomePage> {
                   CategoryCard(
                     data: snapshot.data.config[i],
                     onPressed: () {
-                      if (snapshot.data.config[i].sousCategories.isNotEmpty) {
+                      if (snapshot.data.config[i].sousCategories != null &&
+                          snapshot.data.config[i].sousCategories.isNotEmpty) {
                         Navigator.push(
                           context,
                           PageTransition(
                             type: PageTransitionType.leftToRightWithFade,
                             child: CatalogPage(
+                                selectedCategory: snapshot.data.config[i],
                                 subCategries:
                                     snapshot.data.config[i].sousCategories),
                           ),

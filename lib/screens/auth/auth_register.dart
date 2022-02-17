@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../index.dart';
 
 class AuthRegister extends StatefulWidget {
-  AuthRegister({Key key}) : super(key: key);
+  const AuthRegister({Key key}) : super(key: key);
 
   @override
   _AuthRegisterState createState() => _AuthRegisterState();
@@ -47,23 +47,41 @@ class _AuthRegisterState extends State<AuthRegister> {
           ),
           child: SafeArea(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 4.7),
+              padding:
+                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
+                  Center(
+                    child: Container(
+                      height: 100.0,
+                      width: 100.0,
+                      decoration: BoxDecoration(
+                          image: const DecorationImage(
+                            image: AssetImage("assets/icons/app_icon.png"),
+                            fit: BoxFit.cover,
+                          ),
+                          color: Colors.yellow[800],
+                          borderRadius: BorderRadius.circular(20.0)),
                     ),
-                    child: Text(
-                      "Veuillez créer à votre compte !",
-                      style: GoogleFonts.lato(
-                        color: Colors.grey[200],
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 1.0,
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                      ),
+                      child: Text(
+                        "Veuillez créer à votre compte !",
+                        style: GoogleFonts.lato(
+                          color: Colors.grey[200],
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w300,
+                          letterSpacing: 1.0,
+                        ),
                       ),
                     ),
                   ),
@@ -187,7 +205,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30.0),
                                   ),
-                                  color: Colors.yellow[900],
+                                  color: accentColor,
                                   child: Text(
                                     'créer'.toUpperCase(),
                                     style: GoogleFonts.lato(
@@ -218,7 +236,7 @@ class _AuthRegisterState extends State<AuthRegister> {
                                       child: Text(
                                         "Connectez-vous.",
                                         style: GoogleFonts.lato(
-                                          color: Colors.yellow[900],
+                                          color: secondaryColor,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),

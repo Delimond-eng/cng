@@ -7,6 +7,7 @@ import 'package:cng/constants/controllers.dart';
 import 'package:cng/constants/global.dart';
 import 'package:cng/constants/style.dart';
 import 'package:cng/models/chat.dart';
+import 'package:cng/models/chat_model.dart';
 import 'package:cng/models/products_model.dart';
 import 'package:cng/models/single_product_model.dart';
 import 'package:cng/pages/messages/pages/chat_details_page.dart';
@@ -37,7 +38,7 @@ class _TradingPageState extends State<TradingPage> {
   final _formOffreKey = GlobalKey<FormState>();
   final _textOffreMontant = TextEditingController();
   bool isGridView = true;
-  String userChatId = "";
+  Chats lastChat;
 
   @override
   void dispose() {
@@ -62,7 +63,7 @@ class _TradingPageState extends State<TradingPage> {
           if (e.produit != null) {
             if (e.produit.produitId == widget.product.produitId) {
               setState(() {
-                userChatId = chat.chatId;
+                lastChat = chat;
               });
               return;
             } else {
@@ -278,8 +279,9 @@ class _TradingPageState extends State<TradingPage> {
       context,
       PageTransition(
         child: ChatDetailsPage(
-          messageSender: "Discussion en cours",
-          chatId: userChatId,
+          messageSender:
+              lastChat.users.firstWhere((user) => user.userId != userId).nom,
+          chatId: lastChat.chatId,
         ),
         type: PageTransitionType.rightToLeftWithFade,
       ),
@@ -578,7 +580,7 @@ class _TradingPageState extends State<TradingPage> {
                                             ),
                                           ),
                                         ),
-                                        if (userChatId.isNotEmpty) ...[
+                                        if (lastChat != null) ...[
                                           const SizedBox(
                                             width: 10.0,
                                           ),

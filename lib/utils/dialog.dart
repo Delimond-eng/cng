@@ -159,7 +159,7 @@ class XDialog {
     // ignore: deprecated_member_use
     Widget cancelButton = FlatButton(
       child: Text(
-        "Annuler",
+        "Annuler".toUpperCase(),
         style: GoogleFonts.mulish(
             fontWeight: FontWeight.w700,
             fontSize: 14,
@@ -171,7 +171,7 @@ class XDialog {
     // ignore: deprecated_member_use
     Widget continueButton = FlatButton(
       child: Text(
-        "Valider",
+        "Valider".toUpperCase(),
         style: GoogleFonts.mulish(
           fontWeight: FontWeight.w700,
           fontSize: 14,

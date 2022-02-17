@@ -881,7 +881,6 @@ class _AddVentePageState extends State<AddVentePage>
                                   context: context,
                                   onCancel: () {
                                     controller.index = 0;
-                                    Get.back();
                                   });
                               return;
                             }

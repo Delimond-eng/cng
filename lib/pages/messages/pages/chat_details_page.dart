@@ -123,7 +123,7 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
                   ),
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
-                    reverse: chatController.messages.length < 6 ? false : true,
+                    reverse: true,
                     padding: const EdgeInsets.symmetric(
                       vertical: 15.0,
                     ),

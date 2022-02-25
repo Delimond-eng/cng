@@ -4,18 +4,18 @@ class UserProducts {
   UserProducts({this.produits});
 
   UserProducts.fromJson(Map<String, dynamic> json) {
-    if (json['produits'] != null) {
-      produits = new List<Produits>();
-      json['produits'].forEach((v) {
-        produits.add(new Produits.fromJson(v));
+    if (json['produit'] != null) {
+      produits = <Produits>[];
+      json['produit'].forEach((v) {
+        produits.add(Produits.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.produits != null) {
-      data['produits'] = this.produits.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = {};
+    if (produits != null) {
+      data['produit'] = produits.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -65,88 +65,98 @@ class Produits {
     dateEnregistrement = json['date_enregistrement'];
     produitStatus = json['produit_status'];
     produitDetails = json['produit_details'] != null
-        ? new ProduitDetails.fromJson(json['produit_details'])
+        ? ProduitDetails.fromJson(json['produit_details'])
         : null;
     if (json['offres'] != null) {
-      offres = new List<Offre>();
+      offres = <Offre>[];
       json['offres'].forEach((v) {
-        offres.add(new Offre.fromJson(v));
+        offres.add(Offre.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['produit_id'] = this.produitId;
-    data['produit_categorie_id'] = this.produitCategorieId;
-    data['categorie'] = this.categorie;
-    data['produit_sous_categorie_id'] = this.produitSousCategorieId;
-    data['sous_categorie'] = this.sousCategorie;
-    data['titre'] = this.titre;
-    data['prix'] = this.prix;
-    data['devise'] = this.devise;
-    data['description'] = this.description;
-    data['date_enregistrement'] = this.dateEnregistrement;
-    data['produit_status'] = this.produitStatus;
-    if (this.produitDetails != null) {
-      data['produit_details'] = this.produitDetails.toJson();
+    final Map<String, dynamic> data = {};
+    data['produit_id'] = produitId;
+    data['produit_categorie_id'] = produitCategorieId;
+    data['categorie'] = categorie;
+    data['produit_sous_categorie_id'] = produitSousCategorieId;
+    data['sous_categorie'] = sousCategorie;
+    data['titre'] = titre;
+    data['prix'] = prix;
+    data['devise'] = devise;
+    data['description'] = description;
+    data['date_enregistrement'] = dateEnregistrement;
+    data['produit_status'] = produitStatus;
+    if (produitDetails != null) {
+      data['produit_details'] = produitDetails.toJson();
     }
-    if (this.offres != null) {
-      data["offres"] = this.offres.map((v) => v.toJson()).toList();
+    if (offres != null) {
+      data['offres'] = offres.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class Offre {
-  String offreId;
-  String montant;
-  String dateEnregistrement;
-  Offre({this.offreId, this.montant, this.dateEnregistrement});
-  Offre.fromJson(Map<String, dynamic> json) {
-    offreId = json["offre_id"];
-    montant = json["montant"];
-    dateEnregistrement = json["date_enregistrement"];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data["offre_id"] = offreId;
-    data["montant"] = montant;
-    data["date_enregistrement"] = dateEnregistrement;
     return data;
   }
 }
 
 class ProduitDetails {
+  User user;
   List<Details> details;
   List<Images> images;
 
-  ProduitDetails({this.details, this.images});
+  ProduitDetails({this.user, this.details, this.images});
 
   ProduitDetails.fromJson(Map<String, dynamic> json) {
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     if (json['details'] != null) {
-      details = new List<Details>();
+      details = <Details>[];
       json['details'].forEach((v) {
-        details.add(new Details.fromJson(v));
+        details.add(Details.fromJson(v));
       });
     }
     if (json['images'] != null) {
-      images = new List<Images>();
+      images = <Images>[];
       json['images'].forEach((v) {
-        images.add(new Images.fromJson(v));
+        images.add(Images.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.details != null) {
-      data['details'] = this.details.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = {};
+    if (user != null) {
+      data['user'] = user.toJson();
     }
-    if (this.images != null) {
-      data['images'] = this.images.map((v) => v.toJson()).toList();
+    if (details != null) {
+      data['details'] = details.map((v) => v.toJson()).toList();
     }
+    if (images != null) {
+      data['images'] = images.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class User {
+  String nom;
+  String email;
+  String telephone;
+  int cote;
+
+  User({this.nom, this.email, this.telephone, this.cote});
+
+  User.fromJson(Map<String, dynamic> json) {
+    nom = json['nom'];
+    email = json['email'];
+    telephone = json['telephone'];
+    cote = json['cote'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['nom'] = nom;
+    data['email'] = email;
+    data['telephone'] = telephone;
+    data['cote'] = cote;
     return data;
   }
 }
@@ -165,10 +175,10 @@ class Details {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['produit_detail_id'] = this.produitDetailId;
-    data['sous_categorie_detail'] = this.sousCategorieDetail;
-    data['produit_detail'] = this.produitDetail;
+    final Map<String, dynamic> data = {};
+    data['produit_detail_id'] = produitDetailId;
+    data['sous_categorie_detail'] = sousCategorieDetail;
+    data['produit_detail'] = produitDetail;
     return data;
   }
 }
@@ -185,9 +195,31 @@ class Images {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['produit_media_id'] = this.produitMediaId;
-    data['media'] = this.media;
+    final Map<String, dynamic> data = {};
+    data['produit_media_id'] = produitMediaId;
+    data['media'] = media;
+    return data;
+  }
+}
+
+class Offre {
+  String offreId;
+  String montant;
+  String dateEnregistrement;
+
+  Offre({this.offreId, this.montant, this.dateEnregistrement});
+
+  Offre.fromJson(Map<String, dynamic> json) {
+    offreId = json['offre_id'];
+    montant = json['montant'];
+    dateEnregistrement = json['date_enregistrement'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['offre_id'] = offreId;
+    data['montant'] = montant;
+    data['date_enregistrement'] = dateEnregistrement;
     return data;
   }
 }

@@ -4,8 +4,6 @@ import 'package:cng/constants/global.dart';
 import 'package:cng/services/api_service.dart';
 import 'package:get/get.dart';
 
-import '../index.dart';
-
 class UsersController extends GetxController {
   static UsersController instance = Get.find();
 

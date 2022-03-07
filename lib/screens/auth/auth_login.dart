@@ -176,7 +176,7 @@ class _AuthLoginState extends State<AuthLogin> {
                                           await Navigator.pushAndRemoveUntil(
                                             context,
                                             PageTransition(
-                                              child: HomeScreen(),
+                                              child: const HomeScreen(),
                                               type: PageTransitionType
                                                   .leftToRightWithFade,
                                             ),
@@ -215,7 +215,7 @@ class _AuthLoginState extends State<AuthLogin> {
                                         Navigator.push(
                                           context,
                                           PageTransition(
-                                            child: AuthRegister(),
+                                            child: const AuthRegister(),
                                             type:
                                                 PageTransitionType.bottomToTop,
                                           ),

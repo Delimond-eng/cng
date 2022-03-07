@@ -1,14 +1,14 @@
-// ignore_for_file: prefer_collection_literals, deprecated_member_use
-
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:cng/constants/global.dart';
+import 'package:cng/models/menu_config_model.dart';
 import 'package:cng/models/offer_model.dart';
 import 'package:cng/models/products_model.dart';
 import 'package:cng/models/single_product_model.dart';
 import 'package:cng/models/user_product_model.dart';
 import 'package:cng/screens/auth/auth_login.dart';
+import 'package:cng/services/api_manager.dart';
 import 'package:cng/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,9 +17,13 @@ import 'package:page_transition/page_transition.dart';
 class ManagerController extends GetxController {
   static ManagerController instance = Get.find();
 
-  var userProducts = List<Produits>().obs;
+  var homeProducts = <Product>[].obs;
 
-  var userOffers = List<Offres>().obs;
+  var homeCategories = <Config>[].obs;
+
+  var userProducts = <Produits>[].obs;
+
+  var userOffers = <Offres>[].obs;
 
   var singleProduct = SingleData().obs;
 
@@ -31,13 +35,19 @@ class ManagerController extends GetxController {
     refreshDatas();
   }
 
-  @override
-  onClose() {
-    super.onClose();
-    //_streamSubscription.cancel();
-  }
-
   Future<void> refreshDatas() async {
+    var products = await ApiManager.viewHomeDatas();
+    if (products != null) {
+      homeProducts.value = products.reponse.produits;
+    }
+    var configs = await ApiManager.viewCategories();
+    if (configs != null) {
+      homeCategories.value = configs.config;
+    }
+    if (storage.read("userid") != null) {
+      var userData = await ApiManager.viewOwnProductsAndServices();
+      userProducts.value = userData.produits;
+    }
     //await viewHomeDatas();
     /*_streamSubscription = streamHomeView().listen((data) {
       homeProducts.value = data.reponse.produits;
@@ -81,32 +91,6 @@ class ManagerController extends GetxController {
     }
   }
 
-  Future<UserProducts> viewOwnProductsAndServices() async {
-    var result;
-    try {
-      var userId = storage.read("userid");
-      if (userId != null) {
-        result = await ApiService.request(
-          body: <String, dynamic>{
-            "user_id": userId,
-          },
-          url: "/users/produits/voir",
-          method: "post",
-        );
-      }
-    } catch (exc) {
-      print("error from view products & services void $exc");
-    }
-    if (result != null) {
-      var json = jsonDecode(result);
-      var data = UserProducts.fromJson(json);
-      userProducts.value = data.produits;
-      return data;
-    } else {
-      return null;
-    }
-  }
-
   Future<ProductsModel> viewHomeDatas() async {
     var result;
     try {
@@ -123,42 +107,6 @@ class ManagerController extends GetxController {
       return data;
     } else {
       return null;
-    }
-  }
-
-  Future<ProductsModel> getDatas() async {
-    var result;
-    try {
-      result = await ApiService.request(
-        url: "/content/home",
-        method: "get",
-      );
-    } catch (err) {
-      print("error from home getdata void $err");
-    }
-
-    if (result != null) {
-      var json = jsonDecode(result);
-      var data = ProductsModel.fromJson(json);
-      return data;
-    } else {
-      return null;
-    }
-  }
-
-  Stream<ProductsModel> streamHomeView() async* {
-    while (true) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      var data = await getDatas();
-      yield data;
-    }
-  }
-
-  Stream<UserProducts> streamUserProducts() async* {
-    while (true) {
-      await Future.delayed(const Duration(seconds: 5));
-      var data = await viewOwnProductsAndServices();
-      yield data;
     }
   }
 

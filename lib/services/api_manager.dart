@@ -12,18 +12,29 @@ import 'api_service.dart';
 class ApiManager {
   static Future<MenuConfigModel> viewCategories() async {
     var result;
-    try {
-      result = await ApiService.request(
-        url: "/content/config/menu",
-        method: "get",
-      );
-    } catch (err) {
-      print("error from home getdata void $err");
+    DateTime _now = DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().hour);
+    int nowTimestamp = _now.microsecondsSinceEpoch;
+    if (storage.read('$nowTimestamp') == null) {
+      try {
+        result = await ApiService.request(
+          url: "/content/config/menu",
+          method: "get",
+        );
+        storage.write('$nowTimestamp', result);
+      } catch (err) {
+        print("error from home getdata void $err");
+      }
+    } else {
+      DateTime _lastTime = _now.subtract(const Duration(hours: 1));
+      int _lastTimestamp = _lastTime.microsecondsSinceEpoch;
+      storage.remove('$_lastTimestamp');
+      result = storage.read('$nowTimestamp');
     }
+
     if (result != null) {
       var json = jsonDecode(result);
-      var data = MenuConfigModel.fromJson(json);
-      return data;
+      return MenuConfigModel.fromJson(json);
     } else {
       return null;
     }
@@ -37,12 +48,11 @@ class ApiManager {
         method: "get",
       );
     } catch (err) {
-      print("error from home getdata void $err");
+      print("error from home get home product void $err");
     }
     if (result != null) {
       var json = jsonDecode(result);
-      var data = ProductsModel.fromJson(json);
-      return data;
+      return ProductsModel.fromJson(json);
     } else {
       return null;
     }
@@ -57,18 +67,17 @@ class ApiManager {
           body: <String, dynamic>{
             "user_id": userId,
           },
-          url: "/users/produits/voir",
+          url: "users/produits/voir",
           method: "post",
         );
       }
     } catch (exc) {
-      print("error from view products & services void $exc");
+      print("error from view user products & services void $exc");
     }
 
     if (result != null) {
       var json = jsonDecode(result);
-      var data = UserProducts.fromJson(json);
-      return data;
+      return UserProducts.fromJson(json);
     } else {
       return null;
     }
@@ -115,7 +124,6 @@ class ApiManager {
     } catch (err) {
       print("error from chating $err");
     }
-    print(response);
     if (response != null) {
       var json = jsonDecode(response);
       if (json["error"] != null) {
@@ -142,7 +150,6 @@ class ApiManager {
     } catch (err) {
       print("error from view chats $err");
     }
-
     if (response != null) {
       var json = jsonDecode(response);
       if (json["error"] != null) {

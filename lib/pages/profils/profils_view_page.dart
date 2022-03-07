@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cng/components/custom_header.dart';
 import 'package:cng/components/user_session_component.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../index.dart';
@@ -55,19 +56,22 @@ class _ProfilsViewPageState extends State<ProfilsViewPage> {
                   ),
 
                   //${managerController.userProducts.length.toString().padLeft(2, "0")}
-                  ProfilTile(
-                    badged: false,
-                    icon: "assets/icons/shopping-bag-svgrepo-com.svg",
-                    label: "Mes produits & services (0)",
-                    onPressed: () {
-                      /*Navigator.push(
-                        context,
-                        PageTransition(
-                          child: UserProductViewPage(),
-                          type: PageTransitionType.rightToLeftWithFade,
-                        ),
-                      );*/
-                    },
+                  Obx(
+                    () => ProfilTile(
+                      badged: false,
+                      icon: "assets/icons/shopping-bag-svgrepo-com.svg",
+                      label:
+                          "Mes produits & services (${managerController.userProducts.length})",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            child: const UserProductViewPage(),
+                            type: PageTransitionType.rightToLeftWithFade,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                   ProfilTile(
                     badged: false,
@@ -186,81 +190,68 @@ class ProfilTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        image: const DecorationImage(
-          image: AssetImage("assets/shapes/shapebg.jpg"),
-          fit: BoxFit.cover,
-        ),
+        color: Colors.white.withOpacity(.8),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.1),
-            offset: const Offset(0, 3),
-            blurRadius: 10.0,
+            offset: Offset.zero,
+            blurRadius: 3.0,
           )
         ],
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: Colors.white.withOpacity(.8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(.1),
-              offset: const Offset(0, 3),
-              blurRadius: 10.0,
-            )
-          ],
+        border: Border.all(
+          color: primaryColor.withOpacity(.5),
         ),
-        child: Material(
+      ),
+      child: Material(
+        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.transparent,
+        child: InkWell(
           borderRadius: BorderRadius.circular(10.0),
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(10.0),
-            onTap: onPressed,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 60.0,
-                    width: 60.0,
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: BoxDecoration(
-                      color: Colors
-                          .primaries[Random().nextInt(Colors.primaries.length)]
-                          .shade900,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(.1),
-                          offset: const Offset(0, 3),
-                          blurRadius: 10.0,
-                        )
-                      ],
-                    ),
-                    child: Center(
-                      child: SvgPicture.asset(
-                        icon,
-                        color: Colors.white,
-                      ),
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 60.0,
+                  width: 60.0,
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    color: Colors
+                        .primaries[Random().nextInt(Colors.primaries.length)]
+                        .shade900,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.1),
+                        offset: const Offset(0, 3),
+                        blurRadius: 10.0,
+                      )
+                    ],
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      icon,
+                      color: Colors.white,
                     ),
                   ),
-                  const SizedBox(
-                    width: 15.0,
-                  ),
-                  Flexible(
-                    child: Text(
-                      label,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.lato(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
-                      ),
+                ),
+                const SizedBox(
+                  width: 15.0,
+                ),
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lato(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           ),
         ),

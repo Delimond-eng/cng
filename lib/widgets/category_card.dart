@@ -48,7 +48,7 @@ class CategoryCard extends StatelessWidget {
                 if (data.categorieIcon != null &&
                     data.categorieIcon.isNotEmpty) ...[
                   SvgPicture.network(
-                    data.categorieIcon,
+                    data.categorieIcon.replaceAll("https", "http"),
                     color: Colors.white,
                     height: 25.0,
                     width: 25.0,

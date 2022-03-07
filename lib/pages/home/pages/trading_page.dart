@@ -14,14 +14,12 @@ import 'package:cng/pages/messages/pages/chat_details_page.dart';
 import 'package:cng/screens/auth/auth_login.dart';
 import 'package:cng/services/api_manager.dart';
 import 'package:cng/utils/dialog.dart';
-import 'package:cng/widgets/trade_little_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shimmer/shimmer.dart';
 
 class TradingPage extends StatefulWidget {
   final Product product;
@@ -383,9 +381,13 @@ class _TradingPageState extends State<TradingPage> {
                                                     )
                                                   : null,
                                               image: DecorationImage(
-                                                image: MemoryImage(
-                                                  base64Decode(data.media),
-                                                ),
+                                                image: data.media != null
+                                                    ? MemoryImage(
+                                                        base64Decode(
+                                                            data.media),
+                                                      )
+                                                    : NetworkImage(
+                                                        data.mediaUrl),
                                                 fit: BoxFit.cover,
                                               ),
                                               boxShadow: [
@@ -680,7 +682,7 @@ class _TradingPageState extends State<TradingPage> {
                                       ],
                                     ),
                                   ),
-                                  FutureBuilder<ProductsModel>(
+                                  /*FutureBuilder<ProductsModel>(
                                     future: ApiManager.viewHomeDatas(),
                                     builder: (context, snapshot) {
                                       if (snapshot.data == null) {
@@ -698,7 +700,7 @@ class _TradingPageState extends State<TradingPage> {
                                             shrinkWrap: true,
                                             gridDelegate:
                                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                                              childAspectRatio: .95,
+                                              childAspectRatio: .8,
                                               crossAxisSpacing: 10,
                                               mainAxisSpacing: 10,
                                               crossAxisCount: 2,
@@ -738,7 +740,7 @@ class _TradingPageState extends State<TradingPage> {
                                                 shrinkWrap: true,
                                                 gridDelegate:
                                                     const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  childAspectRatio: 0.8,
+                                                  childAspectRatio: 0.75,
                                                   crossAxisSpacing: 10,
                                                   mainAxisSpacing: 10,
                                                   crossAxisCount: 2,
@@ -750,25 +752,7 @@ class _TradingPageState extends State<TradingPage> {
                                                       .reponse.produits[index];
                                                   return ProductTradeLittleCard(
                                                     product: data,
-                                                    onPressed: () async {
-                                                      /*Xloading.showLoading(
-                                                          context);
-                                                      await managerController
-                                                          .getSingleProduct(
-                                                              produitId: data
-                                                                  .produitId);
-                                                      Xloading.dismiss();
-                                                      await Navigator.push(
-                                                        context,
-                                                        PageTransition(
-                                                          child: TradingPage(
-                                                            product: data,
-                                                          ),
-                                                          type: PageTransitionType
-                                                              .rightToLeftWithFade,
-                                                        ),
-                                                      );*/
-                                                    },
+                                                    onPressed: () async {},
                                                   );
                                                 },
                                               )
@@ -783,31 +767,13 @@ class _TradingPageState extends State<TradingPage> {
                                                       .reponse.produits[index];
                                                   return ProductTradeListCard(
                                                     product: data,
-                                                    onPressed: () async {
-                                                      /*Xloading.showLoading(
-                                                          context);
-                                                      await managerController
-                                                          .getSingleProduct(
-                                                              produitId: data
-                                                                  .produitId);
-                                                      Xloading.dismiss();
-                                                      await Navigator.push(
-                                                        context,
-                                                        PageTransition(
-                                                          child: TradingPage(
-                                                            product: data,
-                                                          ),
-                                                          type: PageTransitionType
-                                                              .rightToLeftWithFade,
-                                                        ),
-                                                      );*/
-                                                    },
+                                                    onPressed: () async {},
                                                   );
                                                 },
                                               );
                                       }
                                     },
-                                  )
+                                  )*/
                                 ],
                               ),
                             ),
@@ -1072,17 +1038,20 @@ class _TradingPageState extends State<TradingPage> {
                             height: MediaQuery.of(context).size.height * .28,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              image: image.media.isNotEmpty
-                                  ? DecorationImage(
-                                      image: MemoryImage(
-                                          base64Decode(image.media)),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : const DecorationImage(
-                                      image: AssetImage(
-                                          "assets/shapes/placeholder.png"),
-                                      fit: BoxFit.fill,
-                                    ),
+                              image:
+                                  image.media != null || image.mediaUrl != null
+                                      ? DecorationImage(
+                                          image: image.media != null
+                                              ? MemoryImage(
+                                                  base64Decode(image.media))
+                                              : NetworkImage(image.mediaUrl),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : const DecorationImage(
+                                          image: AssetImage(
+                                              "assets/shapes/placeholder.png"),
+                                          fit: BoxFit.fill,
+                                        ),
                               color: Colors.white,
                               borderRadius: BorderRadius.zero,
                               boxShadow: [
@@ -1097,13 +1066,23 @@ class _TradingPageState extends State<TradingPage> {
                               color: Colors.transparent,
                               child: InkWell(
                                 onTap: () {
-                                  if (image.media.length > 200) {
+                                  if (image.media != null) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => PhotoViewer(
                                           tag: image.produitMediaId,
                                           image: image.media,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PhotoViewer(
+                                          tag: image.produitMediaId,
+                                          image: image.mediaUrl,
                                         ),
                                       ),
                                     );

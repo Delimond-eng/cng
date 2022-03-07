@@ -232,7 +232,9 @@ class _VentesViewPageState extends State<VentesViewPage> {
                                                 child: category.categorieIcon !=
                                                         null
                                                     ? SvgPicture.network(
-                                                        category.categorieIcon,
+                                                        category.categorieIcon
+                                                            .replaceAll("https",
+                                                                "http"),
                                                         color: Colors.grey[100],
                                                         height: 50.0,
                                                         width: 50.0,
@@ -323,156 +325,6 @@ class _VentesViewPageState extends State<VentesViewPage> {
               ],
             ),
             UserSession()
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProductCard extends StatelessWidget {
-  const ProductCard({
-    Key key,
-    @required this.data,
-    this.onPressed,
-  }) : super(key: key);
-
-  final Produits data;
-  final Function onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: const DecorationImage(
-          image: AssetImage("assets/shapes/shape2.jpg"),
-          fit: BoxFit.cover,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.1),
-            blurRadius: 12.0,
-            offset: const Offset(0.0, 10.0),
-          )
-        ],
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(.9),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 100.0,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: MemoryImage(
-                      base64Decode(data.produitDetails.images[0].media)),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    child: Text(
-                      truncateString(data.titre, 20),
-                      style: GoogleFonts.lato(
-                        color: primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10.0),
-                      Container(
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage("assets/shapes/shapebg.png"),
-                          ),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: primaryColor.withOpacity(.8),
-                            borderRadius: BorderRadius.circular(5.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(.3),
-                                blurRadius: 12.0,
-                                offset: const Offset(0, 10.0),
-                              )
-                            ],
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(5.0),
-                            child: InkWell(
-                              onTap: onPressed,
-                              borderRadius: BorderRadius.circular(5.0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Center(
-                                      child: Text(
-                                        "Voir offres",
-                                        style: GoogleFonts.lato(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.blue[50],
-                                          fontSize: 15.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Container(
-                                      height: 50.0,
-                                      decoration: BoxDecoration(
-                                        color: data.offres.isNotEmpty
-                                            ? Colors.green[700]
-                                            : Colors.amber[900],
-                                        borderRadius:
-                                            const BorderRadius.horizontal(
-                                          right: Radius.circular(5.0),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          data.offres.length
-                                              .toString()
-                                              .padLeft(2, "0"),
-                                          style: GoogleFonts.lato(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),

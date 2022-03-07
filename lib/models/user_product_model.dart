@@ -4,9 +4,9 @@ class UserProducts {
   UserProducts({this.produits});
 
   UserProducts.fromJson(Map<String, dynamic> json) {
-    if (json['produit'] != null) {
+    if (json['produits'] != null) {
       produits = <Produits>[];
-      json['produit'].forEach((v) {
+      json['produits'].forEach((v) {
         produits.add(Produits.fromJson(v));
       });
     }
@@ -15,7 +15,7 @@ class UserProducts {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     if (produits != null) {
-      data['produit'] = produits.map((v) => v.toJson()).toList();
+      data['produits'] = produits.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -186,18 +186,21 @@ class Details {
 class Images {
   String produitMediaId;
   String media;
+  String mediaUrl;
 
-  Images({this.produitMediaId, this.media});
+  Images({this.produitMediaId, this.media, this.mediaUrl});
 
   Images.fromJson(Map<String, dynamic> json) {
     produitMediaId = json['produit_media_id'];
     media = json['media'];
+    mediaUrl = json['media_url'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['produit_media_id'] = produitMediaId;
     data['media'] = media;
+    data['media_url'] = mediaUrl;
     return data;
   }
 }

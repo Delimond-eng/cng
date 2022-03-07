@@ -42,32 +42,53 @@ class ProductTradeLittleCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 110.0,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: primaryColor.withOpacity(.2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(.3),
-                      blurRadius: 12.0,
-                      offset: const Offset(0.0, 3.0),
-                    )
-                  ],
-                  image: (product.image != null)
-                      ? DecorationImage(
-                          image: MemoryImage(base64Decode(product.image)),
-                          fit: BoxFit.cover,
-                          scale: 1.5,
-                        )
-                      : const DecorationImage(
-                          image: AssetImage("assets/shapes/placeholder.png"),
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topCenter,
+              if (product.image != null || product.imageUrl != null) ...[
+                if (product.image != null && product.image.isNotEmpty) ...[
+                  PhysicalModel(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    elevation: 1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.memory(
+                        base64Decode(
+                          product.image,
                         ),
+                        height: 110.0,
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  PhysicalModel(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    elevation: 1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.network(
+                        product.image,
+                        height: 110.0,
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                    ),
+                  ),
+                ]
+              ] else ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Image.asset(
+                    "assets/shapes/placeholder.png",
+                    height: 110.0,
+                    fit: BoxFit.cover,
+                    width: MediaQuery.of(context).size.width,
+                  ),
                 ),
-              ),
+              ],
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -149,33 +170,52 @@ class ProductTradeListCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 80.0,
-                width: 100,
-                margin: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
+              if (product.image != null || product.imageUrl != null) ...[
+                if (product.image != null && product.image.isNotEmpty) ...[
+                  PhysicalModel(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    elevation: 1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.memory(
+                        base64Decode(product.image),
+                        height: 80.0,
+                        width: 100.0,
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  PhysicalModel(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    elevation: 1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.network(
+                        product.image,
+                        height: 80.0,
+                        width: 100.0,
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ]
+              ] else ...[
+                ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
-                  color: primaryColor.withOpacity(.2),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 12.0,
-                      color: Colors.grey.withOpacity(.3),
-                      offset: const Offset(0, 3),
-                    )
-                  ],
-                  image: (product.image != null)
-                      ? DecorationImage(
-                          image: MemoryImage(base64Decode(product.image)),
-                          fit: BoxFit.cover,
-                          scale: 1.5,
-                        )
-                      : const DecorationImage(
-                          image: AssetImage("assets/shapes/placeholder.png"),
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topCenter,
-                        ),
-                ),
-              ),
+                  child: Image.asset(
+                    "assets/shapes/placeholder.png",
+                    height: 80.0,
+                    width: 100.0,
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              ],
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(

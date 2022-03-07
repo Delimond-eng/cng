@@ -20,7 +20,9 @@ class PhotoViewer extends StatelessWidget {
               tag: tag,
               child: Container(
                 child: PhotoView(
-                  imageProvider: MemoryImage(base64Decode(image)),
+                  imageProvider: image.length < 300
+                      ? NetworkImage(image)
+                      : MemoryImage(base64Decode(image)),
                 ),
               ),
             ),

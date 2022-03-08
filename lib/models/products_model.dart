@@ -63,7 +63,7 @@ class Product {
     titre = json['titre'];
     description = json['description'];
     image = json['image'];
-    imageUrl = json['image_url'];
+    imageUrl = json['media_url'];
     prix = json['prix'];
     devise = json['devise'];
   }
@@ -74,7 +74,7 @@ class Product {
     data['titre'] = titre;
     data['description'] = description;
     data['image'] = image;
-    data['image_url'] = imageUrl;
+    data['media_url'] = imageUrl;
     data['prix'] = prix;
     data['devise'] = devise;
     return data;

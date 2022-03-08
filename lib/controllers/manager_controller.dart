@@ -23,6 +23,8 @@ class ManagerController extends GetxController {
 
   var userProducts = <Produits>[].obs;
 
+  var products = <Product>[].obs;
+
   var userOffers = <Offres>[].obs;
 
   var singleProduct = SingleData().obs;
@@ -44,17 +46,30 @@ class ManagerController extends GetxController {
     if (configs != null) {
       homeCategories.value = configs.config;
     }
+    viewUserProducts();
+    //await viewOwnOffers();
+  }
+
+  viewUserProducts() async {
     if (storage.read("userid") != null) {
       var userData = await ApiManager.viewOwnProductsAndServices();
       userProducts.value = userData.produits;
     }
-    //await viewHomeDatas();
-    /*_streamSubscription = streamHomeView().listen((data) {
-      homeProducts.value = data.reponse.produits;
-    });*/
-    //await viewConfigDatas();
-    //await viewOwnProductsAndServices();
-    //await viewOwnOffers();
+  }
+
+  Future<void> viewProductByCategorie({id}) async {
+    var data = await ApiManager.getProductByCategory(key: "category", id: id);
+    if (data != null) {
+      products.value = data;
+    }
+  }
+
+  Future<void> viewProductBySubCategorie({id}) async {
+    var data =
+        await ApiManager.getProductByCategory(key: "subcategory", id: id);
+    if (data != null) {
+      products.value = data;
+    }
   }
 
   Future addNewProduct({String key, Map<String, dynamic> data}) async {
@@ -63,7 +78,10 @@ class ManagerController extends GetxController {
       switch (key) {
         case "nouveau":
           response = await ApiService.request(
-              body: data, method: "post", url: "/users/produits/nouveau");
+            body: data,
+            method: "post",
+            url: "/users/produits/nouveau",
+          );
           break;
         case "image":
           response = await ApiService.request(
@@ -73,9 +91,10 @@ class ManagerController extends GetxController {
           break;
         case "detail":
           response = await ApiService.request(
-              body: data,
-              method: "post",
-              url: "/users/produits/nouveau/ajouterdetail");
+            body: data,
+            method: "post",
+            url: "/users/produits/nouveau/ajouterdetail",
+          );
           break;
       }
     } catch (exception) {
@@ -85,25 +104,6 @@ class ManagerController extends GetxController {
     if (response != null) {
       var data = jsonDecode(response);
       //viewOwnProductsAndServices();
-      return data;
-    } else {
-      return null;
-    }
-  }
-
-  Future<ProductsModel> viewHomeDatas() async {
-    var result;
-    try {
-      result = await ApiService.request(
-        url: "/content/home",
-        method: "get",
-      );
-    } catch (err) {
-      print("error from home getdata void $err");
-    }
-    if (result != null) {
-      var json = jsonDecode(result);
-      var data = ProductsModel.fromJson(json);
       return data;
     } else {
       return null;

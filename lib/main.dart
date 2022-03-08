@@ -1,3 +1,4 @@
+import 'package:cng/utils/permission.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,6 +20,7 @@ void main() async {
   Get.put(UsersController());
   Get.put(ManagerController());
   Get.put(ChatController());
+  await handlePermission(Permission.location);
   runApp(const MyApp());
 }
 

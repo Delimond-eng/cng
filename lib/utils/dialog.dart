@@ -158,25 +158,34 @@ class XDialog {
     // set up the buttons
     // ignore: deprecated_member_use
     Widget cancelButton = FlatButton(
+      color: Colors.grey,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
       child: Text(
         "Annuler".toUpperCase(),
         style: GoogleFonts.mulish(
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-            letterSpacing: 1.0,
-            color: Colors.red[400]),
+          fontWeight: FontWeight.w700,
+          fontSize: 12,
+          letterSpacing: 1.0,
+          color: Colors.white,
+        ),
       ),
       onPressed: onCancel ?? () => Get.back(),
     );
     // ignore: deprecated_member_use
     Widget continueButton = FlatButton(
+      color: Colors.green[700],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
       child: Text(
         "Valider".toUpperCase(),
         style: GoogleFonts.mulish(
           fontWeight: FontWeight.w700,
-          fontSize: 14,
+          fontSize: 12,
           letterSpacing: 1.0,
-          color: Colors.green[700],
+          color: Colors.white,
         ),
       ),
       onPressed: () {
@@ -188,6 +197,7 @@ class XDialog {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.black54,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,10 +210,16 @@ class XDialog {
           SizedBox(
             width: 8,
           ),
-          Text("$title")
+          Text(
+            "$title",
+            style: const TextStyle(color: Colors.white),
+          )
         ],
       ),
-      content: Text("$content"),
+      content: Text(
+        "$content",
+        style: const TextStyle(color: Colors.white),
+      ),
       actions: [
         continueButton,
         cancelButton,
@@ -212,6 +228,7 @@ class XDialog {
 
     // show the dialog
     showDialog(
+      barrierColor: Colors.white12,
       context: context,
       builder: (BuildContext context) {
         return alert;

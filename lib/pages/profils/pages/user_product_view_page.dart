@@ -3,7 +3,10 @@ import 'dart:math';
 
 import 'package:badges/badges.dart';
 import 'package:cng/components/global_header.dart';
+import 'package:cng/constants/global.dart';
 import 'package:cng/models/user_product_model.dart';
+import 'package:cng/services/api_manager.dart';
+import 'package:cng/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -199,12 +202,16 @@ class UserProductCard extends StatelessWidget {
                         )
                       ],
                       image: (data.produitDetails.images.isNotEmpty)
-                          ? const DecorationImage(
-                              image:
-                                  AssetImage("assets/shapes/placeholder.png"),
-                              fit: BoxFit.cover,
+                          ? DecorationImage(
+                              image: NetworkImage(
+                                data
+                                    .produitDetails
+                                    .images[Random().nextInt(
+                                        data.produitDetails.images.length)]
+                                    .mediaUrl,
+                              ),
                               alignment: Alignment.center,
-                              scale: 1.5,
+                              fit: BoxFit.cover,
                             )
                           : const DecorationImage(
                               image:
@@ -218,17 +225,54 @@ class UserProductCard extends StatelessWidget {
                     top: 10.0,
                     right: 10.0,
                     child: Container(
-                      height: 50.0,
-                      width: 50.0,
+                      height: 45.0,
+                      width: 45.0,
                       decoration: BoxDecoration(
-                        color: Colors.grey,
+                        color: Colors.red[400],
                         borderRadius: BorderRadius.circular(50.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(.3),
+                            blurRadius: 12.0,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
                       ),
-                      child: const Center(
-                        child: Icon(
-                          CupertinoIcons.trash_fill,
-                          size: 15.0,
-                          color: Colors.white,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(50.0),
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(50.0),
+                          onTap: () async {
+                            XDialog.show(
+                                context: context,
+                                content:
+                                    "Etes-vous sûr de vouloir retirer ce produit ou service de la vente ?",
+                                icon: Icons.help,
+                                title: "Suppression produit",
+                                onValidate: () async {
+                                  Xloading.showLoading(context);
+                                  await ApiManager.deleteProduct(
+                                    productId: data.produitId,
+                                  ).then((res) {
+                                    Xloading.dismiss();
+                                    if (res != null) {
+                                      if (res["reponse"]["status"] ==
+                                          "success") {
+                                        XDialog.showSuccessAnimation(context);
+                                        managerController.viewUserProducts();
+                                      }
+                                    }
+                                  });
+                                });
+                          },
+                          child: const Center(
+                            child: Icon(
+                              CupertinoIcons.trash_fill,
+                              size: 15.0,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -272,7 +316,7 @@ class UserProductCard extends StatelessWidget {
             child: FlatButton(
               padding: const EdgeInsets.all(5.0),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
+                  borderRadius: BorderRadius.circular(10.0)),
               color: accentColor,
               child: Row(
                 children: [
@@ -281,9 +325,9 @@ class UserProductCard extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.all(5),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(7),
                     ),
                     child: Center(child: Text("${data.offres.length}")),
                   )

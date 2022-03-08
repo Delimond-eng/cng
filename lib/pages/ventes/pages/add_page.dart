@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:cng/utils/permission.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -361,15 +362,17 @@ class _AddVentePageState extends State<AddVentePage>
                         icon: CupertinoIcons.camera_on_rectangle,
                         label: "Capture",
                         onPressed: () async {
-                          var pickedFile =
-                              await takePhoto(src: ImageSource.camera);
-                          if (pickedFile != null) {
-                            var imageBytes =
-                                File(pickedFile.path).readAsBytesSync();
-                            var strImage = base64Encode(imageBytes);
-                            setState(() {
-                              images.add(strImage);
-                            });
+                          var pickedListFile =
+                              await takeMultiplePhoto(src: ImageSource.camera);
+                          if (pickedListFile != null) {
+                            for (var pickedFile in pickedListFile) {
+                              var imageBytes =
+                                  File(pickedFile.path).readAsBytesSync();
+                              var strImage = base64Encode(imageBytes);
+                              setState(() {
+                                images.add(strImage);
+                              });
+                            }
                           }
                         },
                       ),
@@ -699,6 +702,7 @@ class _AddVentePageState extends State<AddVentePage>
   }
 
   Future<void> _postArticle(BuildContext context) async {
+    var gpsData = await getUserLocate();
     if (images.isEmpty) {
       Get.snackbar(
         "Images du produit ou service requises !",
@@ -733,15 +737,19 @@ class _AddVentePageState extends State<AddVentePage>
     }
     //first step
     Xloading.showLoading(context);
-    var infosRes =
-        await managerController.addNewProduct(data: <String, dynamic>{
-      "user_id": infos.userId,
-      "produit_sous_categorie_id": infos.productSubCatId,
-      "titre": infos.titre,
-      "description": infos.desc,
-      "prix": infos.prix,
-      "devise": infos.devise
-    }, key: "nouveau");
+    var infosRes = await managerController.addNewProduct(
+      data: <String, dynamic>{
+        "user_id": infos.userId,
+        "produit_sous_categorie_id": infos.productSubCatId,
+        "titre": infos.titre,
+        "description": infos.desc,
+        "prix": infos.prix,
+        "devise": infos.devise,
+        "latitude": gpsData.latitude,
+        "longitude": gpsData.longitude,
+      },
+      key: "nouveau",
+    );
 
     if (infosRes["reponse"]["status"] == "success") {
       for (String img in images) {
@@ -771,7 +779,9 @@ class _AddVentePageState extends State<AddVentePage>
       }
       Xloading.dismiss();
       XDialog.showSuccessAnimation(context);
-      await managerController.refreshDatas();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        managerController.refreshDatas();
+      });
     }
   }
 }

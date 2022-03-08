@@ -20,7 +20,10 @@ class ApiService {
       case "post":
         response = await client.post(
           Uri.parse('${ApiService.baseUrl}/$url'),
-          headers: headers,
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+            "Connection": "Keep-Alive",
+          },
           body: jsonEncode(body),
         );
         break;

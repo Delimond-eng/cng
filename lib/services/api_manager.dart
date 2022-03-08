@@ -6,6 +6,7 @@ import 'package:cng/models/chat_model.dart';
 import 'package:cng/models/menu_config_model.dart';
 import 'package:cng/models/products_model.dart';
 import 'package:cng/models/user_product_model.dart';
+import 'package:cng/utils/permission.dart';
 
 import 'api_service.dart';
 
@@ -41,11 +42,18 @@ class ApiManager {
   }
 
   static Future<ProductsModel> viewHomeDatas() async {
+    var gpsData = await getUserLocate();
+    double lat = gpsData.latitude;
+    double lng = gpsData.longitude;
     var result;
     try {
       result = await ApiService.request(
         url: "/content/home",
-        method: "get",
+        method: "post",
+        body: {
+          "longitude": lng,
+          "latitude": lat,
+        },
       );
     } catch (err) {
       print("error from home get home product void $err");
@@ -156,6 +164,70 @@ class ApiManager {
         return null;
       }
       return ChatModel.fromJson(json);
+    } else {
+      return null;
+    }
+  }
+
+  static Future deleteProduct({productId}) async {
+    var userId = storage.read("userid");
+    var response;
+    try {
+      response = await ApiService.request(
+        body: {
+          "user_id": userId,
+          "produit_id": productId,
+        },
+        method: "post",
+        url: "/users/produits/supprimer",
+      );
+    } catch (err) {
+      print("error from delete statment ! $err");
+    }
+    if (response != null) {
+      var json = jsonDecode(response);
+      if (json["error"] != null) {
+        return null;
+      }
+      return json;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<Product>> getProductByCategory({String key, id}) async {
+    var response;
+    try {
+      switch (key) {
+        case "category":
+          response = await ApiService.request(
+            body: {"produit_categorie_id": id},
+            method: "post",
+            url: "/content/categorie",
+          );
+          break;
+        case "subcategory":
+          response = await ApiService.request(
+            body: {"produit_sous_categorie_id": id},
+            method: "post",
+            url: "/content/souscategorie",
+          );
+      }
+    } catch (err) {
+      print("error from delete statment ! $err");
+    }
+    if (response != null) {
+      print(response);
+      List<Product> products = [];
+      var json = jsonDecode(response);
+      if (json["content"]["produits"] != null &&
+          json["content"]["produits"].isNotEmpty) {
+        json["content"]["produits"].forEach((e) {
+          products.add(Product.fromJson(e));
+        });
+      }
+
+      return products;
     } else {
       return null;
     }

@@ -170,10 +170,8 @@ class _AuthLoginState extends State<AuthLogin> {
                                           );
                                           return;
                                         } else {
-                                          await managerController
-                                              .refreshDatas();
                                           Xloading.dismiss();
-                                          await Navigator.pushAndRemoveUntil(
+                                          Navigator.pushAndRemoveUntil(
                                             context,
                                             PageTransition(
                                               child: const HomeScreen(),
@@ -182,6 +180,11 @@ class _AuthLoginState extends State<AuthLogin> {
                                             ),
                                             (Route<dynamic> route) => false,
                                           );
+                                          Future.delayed(
+                                              const Duration(milliseconds: 500),
+                                              () {
+                                            managerController.refreshDatas();
+                                          });
                                         }
                                       });
                                     }
@@ -247,7 +250,7 @@ class _AuthLoginState extends State<AuthLogin> {
     );
   }
 
-  Row costumAppTitle() {
+  Widget costumAppTitle() {
     return Row(
       children: [
         Container(

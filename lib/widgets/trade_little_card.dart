@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cng/models/products_model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -42,52 +40,47 @@ class ProductTradeLittleCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (product.image != null || product.imageUrl != null) ...[
-                if (product.image != null && product.image.isNotEmpty) ...[
-                  PhysicalModel(
-                    color: Colors.white,
+              if (product.imageUrl != null) ...[
+                Container(
+                  height: 110.0,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(.2),
                     borderRadius: BorderRadius.circular(10.0),
-                    elevation: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.memory(
-                        base64Decode(
-                          product.image,
-                        ),
-                        height: 110.0,
-                        alignment: Alignment.center,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width,
-                      ),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(.3),
+                          blurRadius: 12.0,
+                          offset: const Offset(0, 3))
+                    ],
+                    image: DecorationImage(
+                      image: NetworkImage(product.imageUrl),
+                      alignment: Alignment.center,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ] else ...[
-                  PhysicalModel(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    elevation: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.network(
-                        product.image,
-                        height: 110.0,
-                        alignment: Alignment.center,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width,
-                      ),
-                    ),
-                  ),
-                ]
+                )
               ] else ...[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(
-                    "assets/shapes/placeholder.png",
-                    height: 110.0,
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
+                Container(
+                  height: 110.0,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(.3),
+                        blurRadius: 12.0,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                    color: primaryColor.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(10.0),
+                    image: const DecorationImage(
+                      image: AssetImage("assets/shapes/placeholder.png"),
+                      alignment: Alignment.center,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
+                )
               ],
               Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -141,7 +134,7 @@ class ProductTradeListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80.0,
+      height: 90.0,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(
         left: 10.0,
@@ -166,90 +159,88 @@ class ProductTradeListCard extends StatelessWidget {
         child: InkWell(
           onTap: onPressed,
           borderRadius: BorderRadius.circular(10.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (product.image != null || product.imageUrl != null) ...[
-                if (product.image != null && product.image.isNotEmpty) ...[
-                  PhysicalModel(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    elevation: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.memory(
-                        base64Decode(product.image),
-                        height: 80.0,
-                        width: 100.0,
-                        alignment: Alignment.center,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ] else ...[
-                  PhysicalModel(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    elevation: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.network(
-                        product.image,
-                        height: 80.0,
-                        width: 100.0,
-                        alignment: Alignment.center,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ]
-              ] else ...[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.asset(
-                    "assets/shapes/placeholder.png",
-                    height: 80.0,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (product.imageUrl != null) ...[
+                  Container(
+                    height: 90.0,
                     width: 100.0,
-                    alignment: Alignment.center,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              ],
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.titre,
-                      style: GoogleFonts.lato(
-                        color: primaryColor,
-                        fontWeight: FontWeight.w600,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(.3),
+                            blurRadius: 12.0,
+                            offset: const Offset(0, 3))
+                      ],
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                        image: NetworkImage(product.imageUrl),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(20.0),
+                  )
+                ] else ...[
+                  Container(
+                    height: 90.0,
+                    width: 100.0,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(.3),
+                            blurRadius: 12.0,
+                            offset: const Offset(0, 3))
+                      ],
+                      image: const DecorationImage(
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                        image: AssetImage("assets/shapes/placeholder.png"),
                       ),
-                      child: Text(
-                        '${product.prix} ${product.devise}',
+                    ),
+                  )
+                ],
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product.titre,
                         style: GoogleFonts.lato(
-                          color: Colors.yellow[900],
-                          fontWeight: FontWeight.w800,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Text(
+                          '${product.prix} ${product.devise}',
+                          style: GoogleFonts.lato(
+                            color: Colors.yellow[900],
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

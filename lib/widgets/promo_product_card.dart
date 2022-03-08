@@ -40,11 +40,9 @@ class PromoProductCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: primaryColor.withOpacity(.2),
                   borderRadius: BorderRadius.circular(15.0),
-                  image: (product.image != null || product.imageUrl != null)
+                  image: (product.imageUrl != null)
                       ? DecorationImage(
-                          image: product.image != null
-                              ? MemoryImage(base64Decode(product.image))
-                              : NetworkImage(product.imageUrl),
+                          image: NetworkImage(product.imageUrl),
                           fit: BoxFit.cover,
                           scale: 2.0,
                           alignment: Alignment.center,

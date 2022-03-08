@@ -5,47 +5,53 @@ class MenuConfigModel {
 
   MenuConfigModel.fromJson(Map<String, dynamic> json) {
     if (json['config'] != null) {
-      config = new List<Config>();
+      config = <Config>[];
       json['config'].forEach((v) {
-        config.add(new Config.fromJson(v));
+        config.add(Config.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.config != null) {
-      data['config'] = this.config.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = {};
+    if (config != null) {
+      data['config'] = config.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Config {
+  String produitCategorieId;
   String categorie;
   String categorieIcon;
   List<SousCategories> sousCategories;
 
-  Config({this.categorie, this.categorieIcon, this.sousCategories});
+  Config(
+      {this.produitCategorieId,
+      this.categorie,
+      this.categorieIcon,
+      this.sousCategories});
 
   Config.fromJson(Map<String, dynamic> json) {
+    produitCategorieId = json['produit_categorie_id'];
     categorie = json['categorie'];
     categorieIcon = json['categorie_icon'];
     if (json['sous_categories'] != null) {
-      sousCategories = new List<SousCategories>();
+      sousCategories = <SousCategories>[];
       json['sous_categories'].forEach((v) {
-        sousCategories.add(new SousCategories.fromJson(v));
+        sousCategories.add(SousCategories.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['categorie'] = this.categorie;
-    data['categorie_icon'] = this.categorieIcon;
-    if (this.sousCategories != null) {
-      data['sous_categories'] =
-          this.sousCategories.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['produit_categorie_id'] = produitCategorieId;
+    data['categorie'] = categorie;
+    data['categorie_icon'] = categorieIcon;
+    if (sousCategories != null) {
+      data['sous_categories'] = sousCategories.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -68,21 +74,21 @@ class SousCategories {
     sousCategorieIcon = json['sous_categorie_icon'];
     sousCategorie = json['sous_categorie'];
     if (json['formulaire_vente_details'] != null) {
-      formulaireVenteDetails = new List<FormulaireVenteDetails>();
+      formulaireVenteDetails = List<FormulaireVenteDetails>();
       json['formulaire_vente_details'].forEach((v) {
-        formulaireVenteDetails.add(new FormulaireVenteDetails.fromJson(v));
+        formulaireVenteDetails.add(FormulaireVenteDetails.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['produit_sous_categorie_id'] = this.produitSousCategorieId;
-    data['sous_categorie_icon'] = this.sousCategorieIcon;
-    data['sous_categorie'] = this.sousCategorie;
-    if (this.formulaireVenteDetails != null) {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['produit_sous_categorie_id'] = produitSousCategorieId;
+    data['sous_categorie_icon'] = sousCategorieIcon;
+    data['sous_categorie'] = sousCategorie;
+    if (formulaireVenteDetails != null) {
       data['formulaire_vente_details'] =
-          this.formulaireVenteDetails.map((v) => v.toJson()).toList();
+          formulaireVenteDetails.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -103,11 +109,10 @@ class FormulaireVenteDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['produit_sous_categorie_detail_id'] =
-        this.produitSousCategorieDetailId;
-    data['icon'] = this.icon;
-    data['sous_categorie_detail'] = this.sousCategorieDetail;
+    final Map<String, dynamic> data = {};
+    data['produit_sous_categorie_detail_id'] = produitSousCategorieDetailId;
+    data['icon'] = icon;
+    data['sous_categorie_detail'] = sousCategorieDetail;
     return data;
   }
 }

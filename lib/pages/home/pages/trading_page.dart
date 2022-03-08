@@ -381,13 +381,9 @@ class _TradingPageState extends State<TradingPage> {
                                                     )
                                                   : null,
                                               image: DecorationImage(
-                                                image: data.media != null
-                                                    ? MemoryImage(
-                                                        base64Decode(
-                                                            data.media),
-                                                      )
-                                                    : NetworkImage(
-                                                        data.mediaUrl),
+                                                image: NetworkImage(
+                                                  data.mediaUrl,
+                                                ),
                                                 fit: BoxFit.cover,
                                               ),
                                               boxShadow: [
@@ -1038,20 +1034,16 @@ class _TradingPageState extends State<TradingPage> {
                             height: MediaQuery.of(context).size.height * .28,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                              image:
-                                  image.media != null || image.mediaUrl != null
-                                      ? DecorationImage(
-                                          image: image.media != null
-                                              ? MemoryImage(
-                                                  base64Decode(image.media))
-                                              : NetworkImage(image.mediaUrl),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : const DecorationImage(
-                                          image: AssetImage(
-                                              "assets/shapes/placeholder.png"),
-                                          fit: BoxFit.fill,
-                                        ),
+                              image: image.mediaUrl != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(image.mediaUrl),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const DecorationImage(
+                                      image: AssetImage(
+                                          "assets/shapes/placeholder.png"),
+                                      fit: BoxFit.fill,
+                                    ),
                               color: Colors.white,
                               borderRadius: BorderRadius.zero,
                               boxShadow: [

@@ -1,10 +1,10 @@
-import 'package:cng/models/products_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../index.dart';
 
 class ProductTradeLittleCard extends StatelessWidget {
-  final Product product;
+  final product;
   final Function onPressed;
   const ProductTradeLittleCard({
     Key key,
@@ -41,25 +41,59 @@ class ProductTradeLittleCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (product.imageUrl != null) ...[
-                Container(
-                  height: 110.0,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(.2),
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
+                CachedNetworkImage(
+                  imageUrl: product.imageUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: 110.0,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
                           color: Colors.grey.withOpacity(.3),
                           blurRadius: 12.0,
-                          offset: const Offset(0, 3))
-                    ],
-                    image: DecorationImage(
-                      image: NetworkImage(product.imageUrl),
-                      alignment: Alignment.center,
-                      fit: BoxFit.cover,
+                          offset: const Offset(0, 3),
+                        )
+                      ],
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      ),
                     ),
                   ),
-                )
+                  placeholder: (context, url) => Container(
+                    height: 110.0,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: primaryColor.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(.3),
+                          blurRadius: 12.0,
+                          offset: const Offset(0, 3),
+                        )
+                      ],
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    height: 110.0,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(.3),
+                          blurRadius: 12.0,
+                          offset: const Offset(0, 3),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ] else ...[
                 Container(
                   height: 110.0,
@@ -123,7 +157,7 @@ class ProductTradeLittleCard extends StatelessWidget {
 }
 
 class ProductTradeListCard extends StatelessWidget {
-  final Product product;
+  final product;
   final Function onPressed;
   const ProductTradeListCard({
     Key key,
@@ -166,25 +200,59 @@ class ProductTradeListCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (product.imageUrl != null) ...[
-                  Container(
-                    height: 90.0,
-                    width: 100.0,
-                    decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(.2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
+                  CachedNetworkImage(
+                    imageUrl: product.imageUrl,
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 90.0,
+                      width: 100.0,
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(.2),
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
                             color: Colors.grey.withOpacity(.3),
                             blurRadius: 12.0,
-                            offset: const Offset(0, 3))
-                      ],
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        alignment: Alignment.center,
-                        image: NetworkImage(product.imageUrl),
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                        ),
                       ),
                     ),
-                  )
+                    placeholder: (context, url) => Container(
+                      height: 90.0,
+                      width: 100.0,
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(.2),
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(.3),
+                            blurRadius: 12.0,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: 90.0,
+                      width: 100.0,
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(.2),
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(.3),
+                            blurRadius: 12.0,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ] else ...[
                   Container(
                     height: 90.0,

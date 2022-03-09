@@ -185,21 +185,19 @@ class Details {
 
 class Images {
   String produitMediaId;
-  String media;
   String mediaUrl;
 
-  Images({this.produitMediaId, this.media, this.mediaUrl});
+  Images({this.produitMediaId, this.mediaUrl});
 
   Images.fromJson(Map<String, dynamic> json) {
     produitMediaId = json['produit_media_id'];
-    media = json['media'];
+    ;
     mediaUrl = json['media_url'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['produit_media_id'] = produitMediaId;
-    data['media'] = media;
     data['media_url'] = mediaUrl;
     return data;
   }

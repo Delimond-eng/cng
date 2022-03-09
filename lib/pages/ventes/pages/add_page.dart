@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:cng/utils/permission.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -368,7 +369,15 @@ class _AddVentePageState extends State<AddVentePage>
                             for (var pickedFile in pickedListFile) {
                               var imageBytes =
                                   File(pickedFile.path).readAsBytesSync();
-                              var strImage = base64Encode(imageBytes);
+                              final result =
+                                  await FlutterImageCompress.compressWithList(
+                                imageBytes,
+                                minHeight: 100,
+                                minWidth: 100,
+                                quality: 60,
+                                format: CompressFormat.png,
+                              );
+                              var strImage = base64Encode(result);
                               setState(() {
                                 images.add(strImage);
                               });
@@ -388,7 +397,15 @@ class _AddVentePageState extends State<AddVentePage>
                           if (pickedFile != null) {
                             var imageBytes =
                                 File(pickedFile.path).readAsBytesSync();
-                            var strImage = base64Encode(imageBytes);
+                            final result =
+                                await FlutterImageCompress.compressWithList(
+                              imageBytes,
+                              minHeight: 100,
+                              minWidth: 100,
+                              quality: 60,
+                              format: CompressFormat.png,
+                            );
+                            var strImage = base64Encode(result);
                             setState(() {
                               images.add(strImage);
                             });

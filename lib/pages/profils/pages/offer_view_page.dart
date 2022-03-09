@@ -87,11 +87,9 @@ class OfferViewPage extends StatelessWidget {
                             image: produits.produitDetails.images.isNotEmpty
                                 ? DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: CacheImageProvider(
-                                      img: base64Decode(
-                                        produits.produitDetails.images[0].media,
-                                      ),
-                                      tag: produits.produitId,
+                                    image: NetworkImage(
+                                      produits
+                                          .produitDetails.images.first.mediaUrl,
                                     ),
                                   )
                                 : const DecorationImage(
@@ -273,9 +271,9 @@ class OfferViewPage extends StatelessWidget {
                                         title: "Offre en attente",
                                         onValidate: () async {
                                           await ApiManager.acceptOrRejectOffer(
-                                                  offerId: data.offreId,
-                                                  reponse: "accepter")
-                                              .then((res) {
+                                            offerId: data.offreId,
+                                            reponse: "accepter",
+                                          ).then((res) {
                                             if (res != null) {
                                               Future.delayed(
                                                   const Duration(

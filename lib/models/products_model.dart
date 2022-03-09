@@ -43,7 +43,6 @@ class Product {
   String produitId;
   String titre;
   String description;
-  String image;
   String imageUrl;
   String prix;
   String devise;
@@ -52,7 +51,6 @@ class Product {
     this.produitId,
     this.titre,
     this.description,
-    this.image,
     this.imageUrl,
     this.prix,
     this.devise,
@@ -62,7 +60,6 @@ class Product {
     produitId = json['produit_id'];
     titre = json['titre'];
     description = json['description'];
-    image = json['image'];
     imageUrl = json['media_url'];
     prix = json['prix'];
     devise = json['devise'];
@@ -73,7 +70,6 @@ class Product {
     data['produit_id'] = produitId;
     data['titre'] = titre;
     data['description'] = description;
-    data['image'] = image;
     data['media_url'] = imageUrl;
     data['prix'] = prix;
     data['devise'] = devise;

@@ -15,23 +15,13 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80.0,
-      width: 80.0,
-      margin: const EdgeInsets.only(right: 8.0),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [accentColor, primaryColor],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+        color: primaryColor.withOpacity(.2),
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(.3),
-            blurRadius: 12.0,
-            offset: const Offset(0, 3),
-          )
-        ],
+        border: Border.all(
+          color: primaryColor.withOpacity(.3),
+          width: .5,
+        ),
       ),
       child: Material(
         borderRadius: BorderRadius.circular(10.0),
@@ -49,9 +39,11 @@ class CategoryCard extends StatelessWidget {
                     data.categorieIcon.isNotEmpty) ...[
                   SvgPicture.network(
                     data.categorieIcon.replaceAll("https", "http"),
-                    color: Colors.white,
-                    height: 25.0,
-                    width: 25.0,
+                    color: Colors
+                        .primaries[Random().nextInt(Colors.primaries.length)]
+                        .shade900,
+                    height: 40.0,
+                    width: 40.0,
                   )
                 ] else ...[
                   SvgPicture.asset(
@@ -69,9 +61,9 @@ class CategoryCard extends StatelessWidget {
                     data.categorie,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.lato(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 10.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12.0,
                     ),
                   ),
                 )

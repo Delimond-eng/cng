@@ -31,10 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      HomePage(),
-      MessagesViewPage(),
-      VentesViewPage(),
-      ProfilsViewPage()
+      const HomePage(),
+      const MessagesViewPage(),
+      const VentesViewPage(),
+      const ProfilsViewPage()
     ];
 
     void _onItemTapped(int index) {
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
           context,
           PageTransition(
-            child: AuthLogin(),
+            child: const AuthLogin(),
             type: PageTransitionType.leftToRightWithFade,
           ),
         );

@@ -217,7 +217,6 @@ class ApiManager {
       print("error from delete statment ! $err");
     }
     if (response != null) {
-      print(response);
       List<Product> products = [];
       var json = jsonDecode(response);
       if (json["content"]["produits"] != null &&

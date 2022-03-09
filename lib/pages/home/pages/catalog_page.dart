@@ -63,7 +63,7 @@ class _CatalogPageState extends State<CatalogPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Produits & services en vente",
+                          "Produits & services",
                           style: GoogleFonts.lato(
                             color: primaryColor,
                             fontSize: 18.0,
@@ -79,7 +79,7 @@ class _CatalogPageState extends State<CatalogPage> {
                                 primaryColor,
                               ],
                             ),
-                            borderRadius: BorderRadius.circular(25.0),
+                            borderRadius: BorderRadius.circular(10.0),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(.3),
@@ -227,7 +227,7 @@ class _CatalogPageState extends State<CatalogPage> {
     return CustomHeader(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
@@ -281,6 +281,8 @@ class _CatalogPageState extends State<CatalogPage> {
             padding: const EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 5.0),
             scrollDirection: Axis.horizontal,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: widget.subCategries
                   .map((data) => SubCategoryCard(data: data))
                   .toList(),

@@ -1,3 +1,4 @@
+import 'package:cng/constants/global.dart';
 import 'package:cng/widgets/costum_input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -171,12 +172,12 @@ class _AuthLoginState extends State<AuthLogin> {
                                           return;
                                         } else {
                                           Xloading.dismiss();
+                                          storage.write("first-start", true);
                                           Navigator.pushAndRemoveUntil(
                                             context,
                                             PageTransition(
                                               child: const HomeScreen(),
-                                              type: PageTransitionType
-                                                  .leftToRightWithFade,
+                                              type: PageTransitionType.fade,
                                             ),
                                             (Route<dynamic> route) => false,
                                           );

@@ -5,10 +5,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'constants/global.dart';
 import 'controllers/chat_controller.dart';
 import 'controllers/manager_controller.dart';
 import 'controllers/users_controller.dart';
 import 'index.dart';
+import 'screens/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +50,15 @@ class MyApp extends StatelessWidget {
           secondary: Colors.yellow[900],
         ),
       ),
-      home: const HomeScreen(),
+      home: Builder(
+        builder: (context) {
+          if (storage.read("first-start") == null) {
+            return const WelcomeScreen();
+          } else {
+            return const HomeScreen();
+          }
+        },
+      ),
     );
   }
 }

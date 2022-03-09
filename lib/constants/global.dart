@@ -20,7 +20,7 @@ List<String> strSpliter(String date) {
 Future<PickedFile> takePhoto({ImageSource src}) async {
   final ImagePicker _picker = ImagePicker();
   // ignore: deprecated_member_use
-  final pickedFile = await _picker.getImage(source: src, imageQuality: 60);
+  final pickedFile = await _picker.getImage(source: src, imageQuality: 50);
 
   if (pickedFile != null) {
     return pickedFile;
@@ -32,7 +32,7 @@ Future<PickedFile> takePhoto({ImageSource src}) async {
 Future<List<PickedFile>> takeMultiplePhoto({ImageSource src}) async {
   final ImagePicker _picker = ImagePicker();
   // ignore: deprecated_member_use
-  final pickedFile = await _picker.getMultiImage(imageQuality: 60);
+  final pickedFile = await _picker.getMultiImage(imageQuality: 0);
 
   if (pickedFile != null) {
     return pickedFile;

@@ -19,21 +19,32 @@ class SingleProductModel {
 
 class SingleData {
   ProduitDetails produitDetails;
+  List<ProductSimulary> produits;
 
   SingleData({
     this.produitDetails,
+    this.produits,
   });
 
   SingleData.fromJson(Map<String, dynamic> json) {
     produitDetails = json['produit_details'] != null
         ? ProduitDetails.fromJson(json['produit_details'])
         : null;
+    if (json['recommandations'] != null) {
+      produits = <ProductSimulary>[];
+      json['recommandations'].forEach((v) {
+        produits.add(ProductSimulary.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     if (produitDetails != null) {
       data['produit_details'] = produitDetails.toJson();
+    }
+    if (produits != null) {
+      data['recommandations'] = produits.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -55,7 +66,7 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     data['nom'] = nom;
     data['email'] = email;
     data['telephone'] = telephone;
@@ -116,7 +127,7 @@ class Details {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     data['produit_detail_id'] = produitDetailId;
     data['sous_categorie_detail'] = sousCategorieDetail;
     data['produit_detail'] = produitDetail;
@@ -142,6 +153,43 @@ class Images {
     data['produit_media_id'] = produitMediaId;
     data['media'] = media;
     data['media_url'] = mediaUrl;
+    return data;
+  }
+}
+
+class ProductSimulary {
+  String produitId;
+  String titre;
+  String prix;
+  String devise;
+  String description;
+  String imageUrl;
+
+  ProductSimulary(
+      {this.produitId,
+      this.titre,
+      this.prix,
+      this.devise,
+      this.description,
+      this.imageUrl});
+
+  ProductSimulary.fromJson(Map<String, dynamic> json) {
+    produitId = json['produit_id'];
+    titre = json['titre'];
+    prix = json['prix'];
+    devise = json['devise'];
+    description = json['description'];
+    imageUrl = json['media_url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['produit_id'] = produitId;
+    data['titre'] = titre;
+    data['prix'] = prix;
+    data['devise'] = devise;
+    data['description'] = description;
+    data['media_url'] = imageUrl;
     return data;
   }
 }

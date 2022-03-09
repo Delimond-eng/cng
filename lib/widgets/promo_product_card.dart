@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cng/models/products_model.dart';
 
 import '../index.dart';
@@ -35,23 +36,54 @@ class PromoProductCard extends StatelessWidget {
           child: Stack(
             overflow: Overflow.visible,
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 1.40,
-                decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(.2),
-                  borderRadius: BorderRadius.circular(15.0),
-                  image: (product.imageUrl != null)
-                      ? DecorationImage(
-                          image: NetworkImage(product.imageUrl),
-                          fit: BoxFit.cover,
-                          scale: 2.0,
-                          alignment: Alignment.center,
-                        )
-                      : const DecorationImage(
-                          image: AssetImage("assets/shapes/placeholder.png"),
-                          fit: BoxFit.fill,
-                          alignment: Alignment.center,
-                        ),
+              CachedNetworkImage(
+                imageUrl: product.imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  width: MediaQuery.of(context).size.width / 1.40,
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(15.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(.3),
+                        blurRadius: 12.0,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
+                placeholder: (context, url) => Container(
+                  width: MediaQuery.of(context).size.width / 1.40,
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(15.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(.3),
+                        blurRadius: 12.0,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  width: MediaQuery.of(context).size.width / 1.40,
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(15.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(.3),
+                        blurRadius: 12.0,
+                        offset: const Offset(0, 3),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Positioned(

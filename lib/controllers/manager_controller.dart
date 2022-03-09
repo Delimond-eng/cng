@@ -26,9 +26,6 @@ class ManagerController extends GetxController {
   var products = <Product>[].obs;
 
   var userOffers = <Offres>[].obs;
-
-  var singleProduct = SingleData().obs;
-
   //StreamSubscription _streamSubscription;
 
   @override
@@ -110,43 +107,25 @@ class ManagerController extends GetxController {
     }
   }
 
-  Future<void> getSingleProduct({String produitId}) async {
+  Future<SingleProductModel> getSingleProduct({String produitId}) async {
+    var result;
     try {
-      var result = await ApiService.request(
+      result = await ApiService.request(
         url: "/content/produit",
         body: <String, dynamic>{
           "produit_id": produitId,
         },
         method: "post",
       );
-
-      if (result != null) {
-        var json = jsonDecode(result);
-        var data = SingleProductModel.fromJson(json);
-        singleProduct.value = data.singleData;
-      }
     } catch (err) {
       print("error from home getdata void $err");
     }
-  }
-
-  Future<void> getProductsByCategory({String productSubCatId}) async {
-    try {
-      var result = await ApiService.request(
-        url: "/content/souscategorie",
-        body: <String, dynamic>{
-          "produit_sous_categorie_id": productSubCatId,
-        },
-        method: "post",
-      );
-
-      if (result != null) {
-        var json = jsonDecode(result);
-        var data = SingleProductModel.fromJson(json);
-        singleProduct.value = data.singleData;
-      }
-    } catch (err) {
-      print("error from home getdata void $err");
+    if (result != null) {
+      var json = jsonDecode(result);
+      var data = SingleProductModel.fromJson(json);
+      return data;
+    } else {
+      return null;
     }
   }
 
